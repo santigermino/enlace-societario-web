@@ -195,7 +195,7 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
 
 .dropdown-menu li a {
     display: block;
-    padding: var(--space-3) var(--space-6);
+    padding: var(--space-2) var(--space-6);
     color: var(--color-primary);
     text-decoration: none;
     font-size: var(--text-sm);
@@ -288,7 +288,7 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
 
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
     gap: var(--space-12);
     margin-bottom: var(--space-12);
 }
