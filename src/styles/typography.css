@@ -28,6 +28,7 @@ h6 {
 
 h1 {
     font-size: var(--text-4xl);
+    margin-top: 1.5rem;
 }
 
 h2 {
