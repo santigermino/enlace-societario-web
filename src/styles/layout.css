@@ -397,9 +397,9 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
         display: block !important;
     }
 
-    /* Ensure the mobile nav panel is strictly solid */
+    /* Removed empty .main-nav solid background causing white block */
     .main-nav {
-        background-color: var(--color-bg-body) !important;
+        background-color: transparent;
     }
 
     .footer-content {
@@ -448,8 +448,8 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
     }
 
     .hero {
-        padding: 3rem 1.5rem !important;
-        /* Added side padding to prevent choking */
+        padding: 6rem 1.5rem 2.5rem 1.5rem !important;
+        /* Added huge top padding to clear header and side padding */
         text-align: center;
         box-sizing: border-box;
     }
