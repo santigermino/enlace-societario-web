@@ -87,10 +87,7 @@ function renderLayout(content, meta = {}) {
 function formatContent(text) {
     if (!text) return '';
 
-    // Simple markdown-to-html for bold
-    let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-    const lines = formattedText.split(/\r?\n/);
+    const lines = text.split(/\r?\n/);
     let html = '';
     let currentList = [];
 
@@ -102,7 +99,7 @@ function formatContent(text) {
     };
 
     for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
+        let line = lines[i].trim();
 
         if (!line) {
             // Check if next line is also empty or if we should close the list
@@ -116,25 +113,44 @@ function formatContent(text) {
 
         // Detect List Items
         if (line.startsWith('-') || line.startsWith('•')) {
-            currentList.push(line.substring(1).trim());
+            // Check if the list item has bold text
+            let liText = line.substring(1).trim();
+            liText = liText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            currentList.push(liText);
             continue;
         }
 
         // If not a list item, close any open list
         closeList();
 
+        // Check if the entire line is wrapped in ** (user intending a heading)
+        let isBoldLine = false;
+        if (line.match(/^\*\*(.*?)\*\*$/)) {
+            isBoldLine = true;
+            line = line.replace(/^\*\*(.*?)\*\*$/, '$1').trim();
+        }
+
+        // Apply inline replacing for bold
+        line = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        // Clean text for checks
+        const cleanText = line.replace(/<[^>]+>/g, '');
+
         // Detect Headings
-        const isAllCaps = line.length > 5 && line === line.toUpperCase() && !line.match(/[a-z]/);
-        const startsWithEmoji = /^[\u{1F300}-\u{1F9FF}]|^[\u{2600}-\u{26FF}]/u.test(line);
-        const looksLikeHeading = startsWithEmoji && line.length < 100;
+        const isAllCaps = cleanText.length > 5 && cleanText === cleanText.toUpperCase() && !cleanText.match(/[a-z]/);
+        const startsWithEmoji = /^[\u{1F300}-\u{1F9FF}]|^[\u{2600}-\u{26FF}]/u.test(cleanText);
+        const looksLikeHeading = startsWithEmoji && cleanText.length < 100;
 
         // Detect CTA (Refined logic)
         const ctaKeywords = ["Solicitá asesoramiento", "Solicitar asesoramiento", "Asesoramiento personalizado"];
-        const isShortLine = line.length < 60;
-        const isCTA = isShortLine && ctaKeywords.some(k => line.toLowerCase().includes(k.toLowerCase()));
+        const isShortLine = cleanText.length < 60;
+        const isCTA = isShortLine && ctaKeywords.some(k => cleanText.toLowerCase().includes(k.toLowerCase()));
 
         if (isCTA) {
             html += `<div style="margin: 2.5rem 0; text-align: center;">\n<a href="/contacto" class="btn btn-primary" title="Solicitar asesoramiento personalizado" style="padding: 1rem 2rem; border-radius: 50px; text-transform: none; font-size: 1.1rem;">${line}</a>\n</div>\n`;
+        } else if (isBoldLine && cleanText.length < 150) {
+            // If it was exclusively wrapped in ** and is short enough, render as H2
+            html += `<h2 style="margin-top: 2.5rem; margin-bottom: 1.25rem; color: var(--color-primary); font-size: 1.75rem;">${line}</h2>\n`;
         } else if (line.startsWith('##')) {
             html += `<h2 style="margin-top: 2.5rem; margin-bottom: 1.25rem; color: var(--color-primary); font-size: 1.75rem; border-bottom: 2px solid var(--color-accent); display: inline-block;">${line.replace(/^##\s*/, '')}</h2>\n`;
         } else if (line.startsWith('###')) {
