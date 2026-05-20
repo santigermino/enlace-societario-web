@@ -26,8 +26,73 @@
     color: var(--color-text-white);
 }
 
-/* Post Content Styling */
-.post-content {
+/* Recommended block */
+.recommended-block {
+  background: #fff;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.recommended-block h3 {
+  color: #1B2E3C; /* title color */
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+.recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.recommended-card {
+  background: #fafafa;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.recommended-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.recommended-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.recommended-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+.recommended-content {
+  padding: 0.75rem 1rem;
+}
+.recommended-title {
+  font-size: 1rem;
+  color: #1B2E3C;
+  margin: 0 0 0.5rem 0;
+}
+.recommended-excerpt {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 0 0 0.5rem 0;
+  height: 2.6rem;
+  overflow: hidden;
+}
+.recommended-category {
+  font-size: 0.75rem;
+  color: #69B97B;
+  font-weight: 600;
+}
+
+/* Internal link styling */
+.internal-link {
+  color: #69B97B;
+  text-decoration: underline;
+}
+
+
     font-size: 1.125rem;
     line-height: 1.8;
 }
@@ -40,4 +105,24 @@
     list-style: disc;
     padding-left: var(--space-6);
     margin-bottom: var(--space-4);
+}
+
+.blog-cta-button {
+    display: inline-block;
+    background-color: #69B97B;
+    color: #ffffff !important;
+    padding: 1.25rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 10px 20px rgba(105, 185, 123, 0.2);
+    transition: all 0.3s ease;
+    text-transform: none;
+}
+
+.blog-cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(105, 185, 123, 0.3);
+    background-color: #5aa66a;
 }

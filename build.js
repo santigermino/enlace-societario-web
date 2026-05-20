@@ -14,7 +14,116 @@ const CONFIG = {
     contentDir: path.join(__dirname, 'src/content'),
     stylesDir: path.join(__dirname, 'src/styles'),
     scriptsDir: path.join(__dirname, 'src/scripts'),
+    scriptsDir: path.join(__dirname, 'src/scripts'),
     publicDir: path.join(__dirname, 'public')
+};
+
+// Global stats for QA
+const BUILD_STATS = {
+    postsGenerated: 0,
+    faqsDetected: 0,
+    faqsDiscarded: 0,
+    ctasRendered: 0,
+    internalLinksInserted: 0,
+    recommendedBlocksGenerated: 0,
+    postsWithoutRecommendations: 0,
+    warnings: []
+};
+
+const logWarning = (type, message, context) => {
+    const msg = `[${type} WARNING] ${message} (Context: "${context}")`;
+    BUILD_STATS.warnings.push(msg);
+    console.log(`\x1b[33m${msg}\x1b[0m`);
+};
+
+// Helper: Escape RegExp special chars
+const escapeRegExp = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Helper: Insert internal link in first suitable paragraph
+const insertInternalLink = (html, word, targetSlug) => {
+    const regex = new RegExp(`(${escapeRegExp(word)})`, 'i');
+    let inserted = false;
+    html = html.replace(regex, (match) => {
+        if (inserted) return match;
+        inserted = true;
+        return `<a href="/blog/${targetSlug}" class="internal-link">${match}</a>`;
+    });
+    return { html, inserted };
+};
+
+// Helper: Pick candidate posts for internal linking / recommendations
+const pickCandidates = (current, allPosts, maxCount) => {
+    // Build keyword arrays (lowercase, trimmed)
+    const curKw = (current.keywords || '').toLowerCase().split(/,|\r?\n/).map(k => k.trim()).filter(Boolean);
+    const candidates = allPosts
+        .filter(p => p.Slug !== current.Slug)
+        .map(p => {
+            const sameCat = p.categoryName === current.categoryName ? 2 : 0;
+            const pKw = (p.keywords || '').toLowerCase().split(/,|\r?\n/).map(k => k.trim()).filter(Boolean);
+            const shared = curKw.filter(k => pKw.includes(k)).length;
+            const score = sameCat + shared;
+            return { post: p, score };
+        })
+        .filter(c => c.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, maxCount);
+    if (candidates.length === 0) {
+        return allPosts.filter(p => p.Slug !== current.Slug).slice(0, maxCount);
+    }
+    return candidates.map(c => c.post);
+};
+
+// Helper: Generate internal links for a post
+const enrichInternalLinks = (post, allPosts, html) => {
+    const maxLinks = 4;
+    let insertedCount = 0;
+    const candidates = pickCandidates(post, allPosts, 10);
+    
+    for (const cand of candidates) {
+        if (insertedCount >= maxLinks) break;
+        
+        // Split title into words and try to find a match
+        const words = cand.Title.split(' ').filter(w => w.length > 5);
+        for (const word of words) {
+            const result = insertInternalLink(html, word, cand.Slug);
+            if (result.inserted) {
+                html = result.html;
+                insertedCount++;
+                BUILD_STATS.internalLinksInserted++;
+                break;
+            }
+        }
+    }
+    return html;
+};
+
+// Helper: Generate recommended block (3 cards)
+const generateRecommendedBlock = (post, allPosts) => {
+    const maxRecs = 3;
+    // Simple fallback: take first maxRecs other posts
+    const recs = allPosts.filter(p => p.Slug !== post.Slug).slice(0, maxRecs);
+    if (recs.length === 0) {
+        BUILD_STATS.postsWithoutRecommendations++;
+        return '';
+    }
+    BUILD_STATS.recommendedBlocksGenerated++;
+    let block = `<div class="recommended-block"><h3>También te puede interesar</h3><div class="recommended-grid">`;
+    for (const r of recs) {
+        const img = r.imageUrl ? r.imageUrl : '/images/default-thumb.jpg';
+        block += `
+    <div class="recommended-card">
+        <a href="/blog/${r.Slug}" class="recommended-link">
+            <img src="${img}" alt="${r.Title}" class="recommended-img"/>
+            <div class="recommended-content">
+                <h4 class="recommended-title">${r.Title}</h4>
+                <p class="recommended-excerpt">${(r.excerpt || r.Content.replace(/<[^>]*>/g, '').substring(0, 120).trim())}...</p>
+                <span class="recommended-category">${r.categoryName}</span>
+            </div>
+        </a>
+    </div>`;
+    }
+    block += `</div></div>`;
+    return block;
 };
 
 // Helper: Ensure directory exists
@@ -84,17 +193,40 @@ function renderLayout(content, meta = {}) {
  * Formats plain text from Google Sheets into structured HTML.
  * Handles paragraphs, lists, and headings.
  */
-function formatContent(text) {
-    if (!text) return '';
+function formatContent(text, contextSlug = 'unknown') {
+    if (!text) return { html: '', faqs: [] };
 
     const lines = text.split(/\r?\n/);
     let html = '';
     let currentList = [];
+    let faqs = [];
+    let inFaqSection = false;
+    let currentQuestion = null;
+    let currentAnswer = '';
 
     const closeList = () => {
         if (currentList.length > 0) {
             html += `<ul style="margin-bottom: 2rem; padding-left: 1.5rem; list-style-type: disc;">\n${currentList.map(li => `<li style="margin-bottom: 0.75rem;">${li}</li>`).join('\n')}\n</ul>\n`;
             currentList = [];
+        }
+    };
+
+    const closeFaq = () => {
+        if (currentQuestion) {
+            const answerClean = currentAnswer.trim().replace(/<[^>]+>/g, '');
+            // Validation: minimum length and no CTA inside the answer
+            if (answerClean.length < 20) {
+                logWarning('FAQ', 'FAQ descartada por respuesta demasiado corta o vacía', currentQuestion);
+                BUILD_STATS.faqsDiscarded++;
+            } else if (answerClean.includes('👉') || answerClean.includes('➡️') || answerClean.includes('http')) {
+                logWarning('FAQ', 'FAQ descartada por contener posibles CTAs o links en la respuesta plana', currentQuestion);
+                BUILD_STATS.faqsDiscarded++;
+            } else {
+                faqs.push({ question: currentQuestion, answer: answerClean });
+                BUILD_STATS.faqsDetected++;
+            }
+            currentQuestion = null;
+            currentAnswer = '';
         }
     };
 
@@ -116,6 +248,13 @@ function formatContent(text) {
             // Check if the list item has bold text
             let liText = line.substring(1).trim();
             liText = liText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // FAQ Question Detection from list items
+            if (inFaqSection && liText.startsWith('¿')) {
+                closeFaq();
+                currentQuestion = liText;
+            }
+            
             currentList.push(liText);
             continue;
         }
@@ -136,12 +275,71 @@ function formatContent(text) {
         // Clean text for checks
         const cleanText = line.replace(/<[^>]+>/g, '');
 
-        // Detect Headings
+        // Detect Headings (Moved up for FAQ detection)
         const isAllCaps = cleanText.length > 5 && cleanText === cleanText.toUpperCase() && !cleanText.match(/[a-z]/);
         const startsWithEmoji = /^[\u{1F300}-\u{1F9FF}]|^[\u{2600}-\u{26FF}]/u.test(cleanText);
         const looksLikeHeading = startsWithEmoji && cleanText.length < 100;
+        const isHeading = isBoldLine || line.startsWith('#') || isAllCaps || looksLikeHeading;
 
-        // Detect CTA (Refined logic)
+        // FAQ Section Detection
+        if (isHeading && cleanText.toLowerCase().includes('preguntas frecuentes')) {
+            inFaqSection = true;
+        } else if (inFaqSection && isHeading && !cleanText.toLowerCase().includes('preguntas frecuentes')) {
+            // Exited FAQ section
+            inFaqSection = false;
+            closeFaq();
+        }
+
+        // FAQ Question Detection
+        if (inFaqSection && line.startsWith('### ¿')) {
+            closeFaq();
+            currentQuestion = line.replace(/^###\s*/, '').trim();
+            // Optional: output as standard H3 in HTML too
+            html += `<h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--color-primary); font-size: 1.4rem;">${currentQuestion}</h3>\n`;
+            continue;
+        } else if (inFaqSection && currentQuestion && !line.startsWith('#')) {
+            currentAnswer += line + ' ';
+        }
+
+        // Advanced CTA Detection (👉 or ➡️)
+        if (cleanText.trim().startsWith('👉') || cleanText.trim().startsWith('➡️')) {
+            let ctaText = cleanText.trim().substring(1).trim();
+            let ctaUrl = '';
+            
+            // Check if URL is inline - Robust Regex that grabs till the end if http is found
+            const urlMatch = ctaText.match(/(https?:\/\/[^\s]+)/);
+            if (urlMatch) {
+                ctaUrl = urlMatch[1].replace(/\)$/, ''); // clean trailing parenthesis if any
+                ctaText = ctaText.replace(urlMatch[0], '').replace(/\(\)$/, '').trim(); // clean text
+            } else {
+                // Check if next line is a URL
+                let nextLine = (lines[i + 1] || '').trim();
+                const nextUrlMatch = nextLine.match(/(https?:\/\/[^\s]+)/);
+                if (nextUrlMatch) {
+                    ctaUrl = nextUrlMatch[1].replace(/\)$/, '');
+                    i++; // skip next line
+                }
+            }
+
+            if (ctaUrl) {
+                const isInternal = ctaUrl.startsWith('/') || ctaUrl.includes('enlacesocietario.com');
+                const targetAttr = isInternal ? '' : ' target="_blank" rel="noopener noreferrer"';
+                html += `<div style="margin: 3rem 0; text-align: center;">\n<a href="${ctaUrl}" class="blog-cta-button"${targetAttr}>${ctaText || 'Más información'}</a>\n</div>\n`;
+                BUILD_STATS.ctasRendered++;
+                continue;
+            } else {
+                // Verify if it was truly intended as a CTA or just a highlighted phrase
+                const intentKeywords = ["solicit", "asesor", "contact", "consult", "ver más", "click", "escrib", "link", "info", "turn"];
+                const isLikelyCTA = intentKeywords.some(k => ctaText.toLowerCase().includes(k));
+                
+                // Suppress warnings for highlighted lines without URL; treat as normal paragraph
+                // If it's not a CTA, it naturally falls through to be rendered as a standard paragraph
+            }
+        }
+
+        // Detect Headings is already evaluated above as isHeading
+
+        // Detect old CTA logic fallback
         const ctaKeywords = ["Solicitá asesoramiento", "Solicitar asesoramiento", "Asesoramiento personalizado"];
         const isShortLine = cleanText.length < 60;
         const isCTA = isShortLine && ctaKeywords.some(k => cleanText.toLowerCase().includes(k.toLowerCase()));
@@ -154,7 +352,9 @@ function formatContent(text) {
         } else if (line.startsWith('##')) {
             html += `<h2 style="margin-top: 2.5rem; margin-bottom: 1.25rem; color: var(--color-primary); font-size: 1.75rem; border-bottom: 2px solid var(--color-accent); display: inline-block;">${line.replace(/^##\s*/, '')}</h2>\n`;
         } else if (line.startsWith('###')) {
-            html += `<h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--color-primary); font-size: 1.4rem;">${line.replace(/^###\s*/, '')}</h3>\n`;
+            if (!inFaqSection) {
+                html += `<h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--color-primary); font-size: 1.4rem;">${line.replace(/^###\s*/, '')}</h3>\n`;
+            }
         } else if (isAllCaps || looksLikeHeading) {
             html += `<h2 style="margin-top: 2.5rem; margin-bottom: 1.25rem; color: var(--color-primary); font-size: 1.75rem;">${line}</h2>\n`;
         } else {
@@ -164,7 +364,9 @@ function formatContent(text) {
     }
 
     closeList();
-    return html;
+    closeFaq();
+    
+    return { html, faqs };
 }
 
 // 1. Fetch and process Data
@@ -380,15 +582,24 @@ async function build() {
         const dateIso = dateObj.toISOString(); // Full ISO for schema
         const dateSimpleIso = dateIso.split('T')[0];
 
+        const parsedContent = formatContent(post.Content, post.Slug);
+        // Enrich with internal links (max 4 per article)
+        const enrichedHtml = enrichInternalLinks(post, posts, parsedContent.html);
+        // Generate recommended block at the end of the article
+        const recommendedBlock = generateRecommendedBlock(post, posts);
+        const enrichedHtmlWithRec = enrichedHtml + '\n' + recommendedBlock;
+
+        // Insert enriched content into template
         postTemplate = postTemplate
             .replace(/{{title}}/g, post.Title)
             .replace(/{{category}}/g, post.categoryName)
             .replace(/{{author}}/g, post.authorName)
             .replace(/{{date_readable}}/g, dateReadable)
             .replace(/{{date_iso}}/g, dateSimpleIso)
-            .replace(/{{post_body}}/g, formatContent(post.Content))
+            .replace(/{{post_body}}/g, enrichedHtmlWithRec)
             .replace(/{{image_url}}/g, post.imageUrl)
             .replace(/{{post_title}}/g, post.Title); // For ALT tags
+
 
         // Keywords badges
         let keywordsHtml = '';
@@ -414,7 +625,7 @@ async function build() {
         const canonical = `${DOMAIN}/blog/${post.Slug}`;
         const imageUrlAbs = post.imageUrl.startsWith('http') ? post.imageUrl : `${DOMAIN}${post.imageUrl}`;
 
-        const postHtml = renderLayout(postTemplate, {
+        let postHtml = renderLayout(postTemplate, {
             title: post.metaTitle,
             description: post.metaDescription,
             canonical: canonical,
@@ -452,10 +663,29 @@ async function build() {
     }
     </script>`
         });
+        
+        // Inject FAQ Schema if present
+        if (parsedContent.faqs && parsedContent.faqs.length > 0) {
+            const faqSchema = {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": parsedContent.faqs.map(faq => ({
+                    "@type": "Question",
+                    "name": faq.question,
+                    "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": faq.answer
+                    }
+                }))
+            };
+            const faqSchemaStr = `\n<script type="application/ld+json">\n${JSON.stringify(faqSchema, null, 2)}\n</script>\n</head>`;
+            postHtml = postHtml.replace('</head>', faqSchemaStr);
+        }
 
         const postPath = path.join(CONFIG.outputDir, 'blog', post.Slug);
         ensureDir(postPath);
         fs.writeFileSync(path.join(postPath, 'index.html'), postHtml);
+        BUILD_STATS.postsGenerated++;
         console.log(`Generated Post: ${post.Slug}`);
 
         sitemapEntries.push({
@@ -564,6 +794,25 @@ Sitemap: ${DOMAIN}/sitemap.xml`;
             console.warn(`[AUDIT WARNING] File: ${file}\n - ${errors.join('\n - ')}`);
         }
     });
+    
+    // QA Report
+    console.log('\n=======================================');
+    console.log('       POST-BUILD QA SUMMARY');
+    console.log('=======================================');
+    console.log(`Posts Generados:   ${BUILD_STATS.postsGenerated}`);
+    console.log(`FAQs Detectadas:   ${BUILD_STATS.faqsDetected}`);
+    console.log(`FAQs Descartadas:  ${BUILD_STATS.faqsDiscarded}`);
+    console.log(`CTAs Renderizados: ${BUILD_STATS.ctasRendered}`);
+    console.log(`Links Internos Insertados: ${BUILD_STATS.internalLinksInserted}`);
+    console.log(`Bloques Recomendados Generados: ${BUILD_STATS.recommendedBlocksGenerated}`);
+    console.log(`Posts sin Recomendaciones: ${BUILD_STATS.postsWithoutRecommendations}`);
+    console.log(`Warnings Totales:  ${BUILD_STATS.warnings.length}`);
+    if (BUILD_STATS.warnings.length > 0) {
+        console.log('\nDetalle de Warnings:');
+        BUILD_STATS.warnings.forEach(w => console.log(` - ${w}`));
+    }
+    console.log('=======================================\n');
+
 
     console.log('Build completed successfully.');
 }
