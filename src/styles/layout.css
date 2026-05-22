@@ -1077,8 +1077,221 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
 
 /* Mobile */
 @media (max-width: 768px) {
-    .service-clickable-card, 
+.service-clickable-card, 
     .service-clickable-card:nth-last-child(-n+2):nth-child(n+4) {
         width: 100%;
+    }
+}
+
+/* --- Comparison Section (Premium Differential) --- */
+.comparison-section {
+    background-color: var(--color-bg-alt); /* Light grey #F8F9FA */
+    padding: var(--space-20) 0; /* Generous vertical padding */
+}
+
+.container-narrow {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.comp-section-title {
+    font-size: 2.25rem;
+    color: var(--color-primary); /* Navy */
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.comp-section-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-body);
+    max-width: 680px;
+    margin: 0 auto 4rem auto;
+    line-height: 1.6;
+}
+
+/* Header Row (Desktop only) */
+.comparison-header {
+    display: flex;
+    padding: 0 2.25rem;
+    margin-bottom: 1rem;
+}
+
+.comp-header-col {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-body);
+    opacity: 0.8;
+}
+
+/* Column Widths (Desktop) */
+.comp-col-feature {
+    width: 25%;
+}
+
+.comp-col-traditional {
+    width: 35%;
+}
+
+.comp-col-enlace {
+    width: 40%;
+}
+
+/* Comparison Cards */
+.comparison-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 3.5rem;
+}
+
+.comparison-card {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg-body); /* White */
+    border-radius: 12px;
+    padding: var(--space-6) 2.25rem;
+    box-shadow: 0 4px 20px rgba(27, 46, 60, 0.02), 0 2px 6px rgba(27, 46, 60, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comparison-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(27, 46, 60, 0.04), 0 4px 10px rgba(27, 46, 60, 0.02);
+}
+
+.comp-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.comp-feature-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1B2E3C; /* Petroleum Blue / Deep Navy */
+    margin: 0;
+}
+
+.comp-mobile-label {
+    display: none; /* Desktop hidden */
+}
+
+.comp-text-traditional {
+    font-size: 0.95rem;
+    color: #718096;
+    margin: 0;
+    padding-right: 2rem;
+    line-height: 1.5;
+}
+
+.comp-enlace-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.comp-check-icon {
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.comp-text-enlace {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.comp-closing-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-primary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* --- Responsive Layout for Comparison --- */
+@media (max-width: 768px) {
+    .comparison-section {
+        padding: 4rem 0;
+    }
+
+    .comp-section-title {
+        font-size: 1.75rem;
+    }
+
+    .comp-section-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .comparison-header {
+        display: none; /* Hide header on mobile */
+    }
+
+    .comparison-cards-list {
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .comparison-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1.5rem 1.5rem;
+        gap: 1.25rem;
+    }
+
+    .comp-col-feature,
+    .comp-col-traditional,
+    .comp-col-enlace {
+        width: 100%;
+    }
+
+    .comp-feature-title {
+        font-size: 1.15rem;
+        border-bottom: 1px solid var(--color-bg-alt);
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .comp-mobile-label {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.25rem;
+    }
+
+    .comp-col-traditional .comp-mobile-label {
+        color: #A0AEC0;
+    }
+
+    .comp-col-enlace .comp-mobile-label {
+        color: #69B97B;
+    }
+
+    .comp-text-traditional {
+        padding-right: 0;
+    }
+
+    .comp-enlace-wrapper {
+        background-color: #F8F9FA;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        border-left: 3px solid #69B97B;
+        margin-top: 0.25rem;
+    }
+
+    .comp-closing-text {
+        font-size: 1rem;
+        padding: 0 1rem;
     }
 }
