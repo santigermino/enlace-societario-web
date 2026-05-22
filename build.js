@@ -583,20 +583,20 @@ async function build() {
         const dateSimpleIso = dateIso.split('T')[0];
 
         const parsedContent = formatContent(post.Content, post.Slug);
-        // Enrich with internal links (max 4 per article)
-        const enrichedHtml = enrichInternalLinks(post, posts, parsedContent.html);
-        // Generate recommended block at the end of the article
+        // Internal linking automático desactivado por decisión editorial.
+        // La función enrichInternalLinks sigue disponible pero no se llama.
+        const postBodyHtml = parsedContent.html;
+        // Generate recommended block (injected after keywords, not inside post_body)
         const recommendedBlock = generateRecommendedBlock(post, posts);
-        const enrichedHtmlWithRec = enrichedHtml + '\n' + recommendedBlock;
 
-        // Insert enriched content into template
+        // Insert content into template
         postTemplate = postTemplate
             .replace(/{{title}}/g, post.Title)
             .replace(/{{category}}/g, post.categoryName)
             .replace(/{{author}}/g, post.authorName)
             .replace(/{{date_readable}}/g, dateReadable)
             .replace(/{{date_iso}}/g, dateSimpleIso)
-            .replace(/{{post_body}}/g, enrichedHtmlWithRec)
+            .replace(/{{post_body}}/g, postBodyHtml)
             .replace(/{{image_url}}/g, post.imageUrl)
             .replace(/{{post_title}}/g, post.Title); // For ALT tags
 
@@ -615,6 +615,7 @@ async function build() {
             }
         }
         postTemplate = postTemplate.replace(/{{keywords_html}}/g, keywordsHtml);
+        postTemplate = postTemplate.replace(/{{recommended_block}}/g, recommendedBlock);
 
         // Author Link
         const authorLinkHtml = post.authorLinkedin

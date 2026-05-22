@@ -5,7 +5,7 @@
     </a>
 </div>
 
-<article class="blog-post" style="padding-bottom: 4rem;">
+<article class="blog-post" style="padding-bottom: 2rem;">
     <div class="post-hero"
         style="width: 100%; height: 450px; overflow: hidden; position: relative; margin-top: 1.5rem;">
         <img src="{{image_url}}" alt="{{post_title}} - Enlace Societario"
@@ -27,23 +27,35 @@
         </div>
     </header>
 
+    <!-- 1. Cuerpo del artículo -->
     <div class="post-content container" style="max-width: 800px; line-height: 1.8; font-size: 1.2rem; color: #2c3e50;">
         {{post_body}}
+    </div>
+
+    <!-- 2. Etiquetas / keywords -->
+    <div class="container" style="max-width: 800px;">
         {{keywords_html}}
     </div>
+
+    <!-- 3. También te puede interesar -->
+    <div class="container" style="max-width: 1100px; margin-top: 3rem;">
+        {{recommended_block}}
+    </div>
+
 </article>
 
+<!-- 4. Banner final de asesoramiento (fondo claro) -->
 <section class="cta-section section"
-    style="background: #2A445C; color: white; text-align: center; padding: 5rem 0; margin-top: 2rem; border-top: 5px solid var(--color-accent);">
+    style="background: #F8F9FA; color: #1B2E3C; text-align: center; padding: 5rem 0; margin-top: 2rem; border-top: 3px solid var(--color-accent);">
     <div class="container">
-        <h2 style="color: white; margin-bottom: 2.5rem; font-size: 2.5rem; font-weight: 800;">¿Necesitás asesoramiento
+        <h2 style="color: #1B2E3C; margin-bottom: 1.5rem; font-size: 2.5rem; font-weight: 800;">¿Necesitás asesoramiento
             sobre este tema?
         </h2>
         <p
-            style="color: rgba(255,255,255,0.8); margin-bottom: 2.5rem; font-size: 1.2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            style="color: #4a5568; margin-bottom: 2.5rem; font-size: 1.2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
             Nuestro equipo de profesionales está listo para ayudarte con tu trámite o consulta societaria.</p>
         <a href="/contacto" class="btn btn-primary" title="Solicitar asesoramiento personalizado sobre este tema"
-            style="background: var(--color-accent); color: white; padding: 1.2rem 2.5rem; font-size: 1.2rem; border-radius: 50px; text-transform: none; font-weight: 700; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">Solicitar
+            style="background: #69B97B; color: white; padding: 1.2rem 2.5rem; font-size: 1.2rem; border-radius: 50px; text-transform: none; font-weight: 700; box-shadow: 0 4px 20px rgba(105,185,123,0.35); transition: all 0.3s ease; display: inline-block; text-decoration: none;">Solicitar
             Asesoramiento</a>
     </div>
 </section>

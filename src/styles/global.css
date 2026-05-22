@@ -41,8 +41,22 @@
 }
 .recommended-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+/* Tablet: 2 columnas */
+@media (max-width: 900px) {
+  .recommended-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 columna */
+@media (max-width: 580px) {
+  .recommended-grid {
+    grid-template-columns: 1fr;
+  }
 }
 .recommended-card {
   background: #fafafa;
@@ -86,13 +100,13 @@
   font-weight: 600;
 }
 
-/* Internal link styling */
+/* Internal link styling (disponible si se reactiva) */
 .internal-link {
   color: #69B97B;
   text-decoration: underline;
 }
 
-
+.post-content {
     font-size: 1.125rem;
     line-height: 1.8;
 }
