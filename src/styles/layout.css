@@ -930,3 +930,155 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
     background: transparent !important;
     border-top: none !important;
 }
+
+/* --- Methodology List (Vertical Single Column) --- */
+.methodology-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.methodology-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-6) var(--space-8);
+    background-color: var(--color-bg-body);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border-top: 4px solid var(--color-accent);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.methodology-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.methodology-card .step-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.methodology-card .step-content {
+    flex-grow: 1;
+}
+
+.methodology-card .step-content h3 {
+    margin-bottom: 0.5rem;
+}
+
+.methodology-card .step-content p {
+    margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+    .methodology-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-4);
+    }
+}
+
+/* --- Services Grid (5 Cards) --- */
+.services-grid-5 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.services-grid-5 > * {
+    /* desktop: 3 cards row 1 (33%), 2 cards row 2 (50%) */
+    /* using flex-basis and max-width */
+}
+
+/* Desktop sizing: first 3 take ~31%, last 2 take ~45% for a nice centered look */
+.service-clickable-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #FAFAFA;
+    border-radius: var(--radius-md);
+    padding: var(--space-8);
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--color-border);
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    /* sizing calculation with gaps */
+    width: calc(33.333% - (var(--space-8) * 2 / 3));
+}
+
+/* Make the last two cards wider to balance the row */
+.service-clickable-card:nth-last-child(-n+2):nth-child(n+4) {
+    width: calc(50% - (var(--space-8) / 2));
+    max-width: 500px; /* prevent them from getting too huge */
+}
+
+.service-clickable-card:hover {
+    background-color: #FFFFFF;
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-accent);
+}
+
+.service-clickable-card h2 {
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.service-clickable-card p.service-desc {
+    margin-bottom: 1.5rem;
+}
+
+.service-clickable-card ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Pushes the 'ideal para' to the bottom */
+}
+
+.service-clickable-card ul li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: var(--color-text-body);
+}
+
+.service-clickable-card .ideal-para {
+    font-size: 0.9rem;
+    background-color: rgba(203, 161, 53, 0.1); /* light accent */
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-primary-dark);
+    margin-top: auto; /* sticky bottom */
+}
+
+.service-clickable-card .ideal-para strong {
+    color: var(--color-accent);
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .service-clickable-card, 
+    .service-clickable-card:nth-last-child(-n+2):nth-child(n+4) {
+        width: calc(50% - (var(--space-8) / 2));
+        max-width: none;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .service-clickable-card, 
+    .service-clickable-card:nth-last-child(-n+2):nth-child(n+4) {
+        width: 100%;
+    }
+}

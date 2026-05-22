@@ -521,6 +521,46 @@ async function build() {
             slug: 'herramientas/que-tipo-de-sociedad-te-conviene',
             bodyClass: 'has-transparent-nav'
         },
+        'servicios-constitucion.html': {
+            title: 'Constitución de Sociedades | Enlace Societario',
+            description: 'Creamos tu sociedad de forma ágil y segura. Te asesoramos en la elección de la figura jurídica (SRL, SA, SAS) y gestionamos todo el proceso registral.',
+            priority: '0.9',
+            changefreq: 'monthly',
+            slug: 'servicios/constitucion',
+            bodyClass: 'has-transparent-nav'
+        },
+        'servicios-reformas.html': {
+            title: 'Reformas Societarias | Enlace Societario',
+            description: 'Adaptamos tu sociedad a los nuevos desafíos. Aumentos de capital, cambios de objeto, renovación de autoridades y más.',
+            priority: '0.9',
+            changefreq: 'monthly',
+            slug: 'servicios/reformas',
+            bodyClass: 'has-transparent-nav'
+        },
+        'servicios-regularizacion.html': {
+            title: 'Regularización y Conflictos Societarios | Enlace Societario',
+            description: 'Intervenimos en situaciones complejas: sucesiones no resueltas, autoridades vencidas, sociedades inactivas o conflictos entre socios.',
+            priority: '0.9',
+            changefreq: 'monthly',
+            slug: 'servicios/regularizacion',
+            bodyClass: 'has-transparent-nav'
+        },
+        'servicios-otros-tramites.html': {
+            title: 'Otros Trámites Societarios | Enlace Societario',
+            description: 'Gestionamos certificaciones y reportes que garantizan el correcto funcionamiento legal y registral de tu sociedad.',
+            priority: '0.9',
+            changefreq: 'monthly',
+            slug: 'servicios/otros-tramites',
+            bodyClass: 'has-transparent-nav'
+        },
+        'servicios-impositivos.html': {
+            title: 'Servicios Contables e Impositivos para Pymes | Enlace Societario',
+            description: 'Delegá en expertos tu gestión contable e impositiva para enfocarte exclusivamente en el crecimiento de tu negocio.',
+            priority: '0.9',
+            changefreq: 'monthly',
+            slug: 'servicios/impositivos',
+            bodyClass: 'has-transparent-nav'
+        },
         '404.html': {
             title: 'Error 404 | Enlace Societario',
             description: 'La página que estás buscando no existe o fue modificada.',
