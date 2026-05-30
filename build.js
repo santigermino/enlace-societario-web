@@ -25,6 +25,7 @@ const BUILD_STATS = {
     faqsDiscarded: 0,
     ctasRendered: 0,
     internalLinksInserted: 0,
+    richBlocksRendered: 0,
     recommendedBlocksGenerated: 0,
     postsWithoutRecommendations: 0,
     warnings: []
@@ -189,6 +190,183 @@ function renderLayout(content, meta = {}) {
     return layout;
 }
 
+// ============================================================
+// RICH COMPONENTS — Reutilizables desde Google Sheets
+// Sintaxis: [TAG]\ncontent lines\n[/TAG]
+// ============================================================
+
+/**
+ * Renders a premium tweet card (no Twitter.js dependency).
+ * Lines: [0] url, [1] "Author Name | @handle", [2+] tweet excerpt
+ */
+function renderTweetCard(lines) {
+    const url = (lines[0] || '').trim();
+    const authorLine = (lines[1] || '').trim();
+    const excerpt = lines.slice(2).join(' ').trim();
+
+    const parts = authorLine.split('|').map(s => s.trim());
+    const authorName = parts[0] || 'Usuario';
+    const handle = parts[1] || '';
+
+    const xIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
+
+    return `
+<div class="tweet-card" role="article" aria-label="Publicación de ${authorName} en X">
+    <div class="tweet-card__header">
+        <div class="tweet-card__author">
+            <div class="tweet-card__avatar" aria-hidden="true">${authorName.charAt(0).toUpperCase()}</div>
+            <div class="tweet-card__author-info">
+                <span class="tweet-card__name">${authorName}</span>
+                ${handle ? `<span class="tweet-card__handle">${handle}</span>` : ''}
+            </div>
+        </div>
+        <div class="tweet-card__icon" aria-hidden="true">${xIconSvg}</div>
+    </div>
+    ${excerpt ? `<p class="tweet-card__text">${excerpt}</p>` : ''}
+    <div class="tweet-card__footer">
+        <a href="${url}" target="_blank" rel="noopener noreferrer" class="tweet-card__link" title="Ver publicación original en X">
+            Ver publicación original <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+    </div>
+</div>
+`.trim();
+}
+
+/**
+ * Renders an embedded PDF preview using Google Docs Viewer.
+ * Lines: [0] url, [1] optional title
+ */
+function renderPdfPreview(lines) {
+    const url = (lines[0] || '').trim();
+    const title = (lines[1] || 'Documento oficial').trim();
+    // Use the provided URL directly if it's already a viewer URL, else wrap in Google Docs viewer
+    const viewerUrl = url.includes('viewer') ? url : `https://docs.google.com/viewerng/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+
+    return `
+<div class="pdf-preview-block">
+    <div class="pdf-preview-block__header">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span class="pdf-preview-block__title">${title}</span>
+        <a href="${url}" target="_blank" rel="noopener noreferrer" class="pdf-preview-block__open-btn" title="Abrir documento completo en nueva pestaña">
+            Abrir documento completo
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+    </div>
+    <div class="pdf-preview-block__viewer">
+        <iframe
+            src="${viewerUrl}"
+            class="pdf-preview-block__iframe"
+            title="${title}"
+            loading="lazy"
+            allowfullscreen>
+            <div class="pdf-preview-block__fallback">
+                <p>El visor no pudo cargar el documento.</p>
+                <a href="${url}" target="_blank" rel="noopener noreferrer" class="blog-cta-button" style="font-size:1rem; padding: 0.8rem 1.8rem;">Abrir documento</a>
+            </div>
+        </iframe>
+    </div>
+</div>
+`.trim();
+}
+
+/**
+ * Renders a responsive comparison table from pipe-separated rows.
+ * Lines: each line is a table row: "| Col1 | Col2 | Col3 |"
+ */
+function renderCompareTable(lines) {
+    const rows = lines
+        .map(l => l.trim())
+        .filter(l => l.startsWith('|'))
+        .map(l => l.replace(/^\||\|$/g, '').split('|').map(c => c.trim()));
+
+    if (rows.length === 0) return '';
+
+    const [headerRow, ...dataRows] = rows;
+
+    const thead = `<thead><tr>${headerRow.map(h => `<th>${h}</th>`).join('')}</tr></thead>`;
+    const tbody = `<tbody>${dataRows.map((row, ri) => `<tr class="${ri % 2 === 0 ? 'even' : 'odd'}">${row.map((cell, ci) => `<td data-label="${headerRow[ci] || ''}">${cell}</td>`).join('')}</tr>`).join('')}</tbody>`;
+
+    return `
+<div class="compare-table-wrapper" role="region" aria-label="Tabla comparativa" tabindex="0">
+    <table class="compare-table">
+        ${thead}
+        ${tbody}
+    </table>
+</div>
+`.trim();
+}
+
+/**
+ * Renders a full-width image with lightbox capability.
+ * Lines: [0] url, [1] alt/caption text
+ */
+function renderCompareImage(lines) {
+    const url = (lines[0] || '').trim();
+    const caption = (lines[1] || '').trim();
+
+    return `
+<figure class="compare-image-block">
+    <img
+        src="${url}"
+        alt="${caption || 'Cuadro comparativo'}"
+        class="compare-image-block__img"
+        loading="lazy"
+        data-lightbox="${url}"
+        data-caption="${caption}"
+        title="Clic para ampliar"
+        tabindex="0"
+        role="button"
+        aria-label="Ampliar imagen: ${caption || 'cuadro comparativo'}"
+    />
+    ${caption ? `<figcaption class="compare-image-block__caption">${caption}</figcaption>` : ''}
+    <div class="compare-image-block__hint" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        Clic para ampliar
+    </div>
+</figure>
+`.trim();
+}
+
+/**
+ * Pre-processes special block tags BEFORE the line-by-line parser.
+ * Replaces [TAG]...[/TAG] with unique placeholders, returns { text, blocks }.
+ * Supported: TWEET, PDF_PREVIEW, COMPARE_TABLE, COMPARE_IMAGE
+ */
+function processSpecialBlocks(text) {
+    const blocks = {};
+    let counter = 0;
+
+    const blockRegex = /\[(TWEET|PDF_PREVIEW|COMPARE_TABLE|COMPARE_IMAGE)\]\r?\n([\s\S]*?)\r?\n\[\/(TWEET|PDF_PREVIEW|COMPARE_TABLE|COMPARE_IMAGE)\]/g;
+
+    text = text.replace(blockRegex, (match, openTag, content, closeTag) => {
+        if (openTag !== closeTag) return match; // mismatched tags — leave as is
+
+        const lines = content.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
+        let html = '';
+
+        try {
+            switch (openTag) {
+                case 'TWEET':         html = renderTweetCard(lines);   break;
+                case 'PDF_PREVIEW':   html = renderPdfPreview(lines);  break;
+                case 'COMPARE_TABLE': html = renderCompareTable(lines); break;
+                case 'COMPARE_IMAGE': html = renderCompareImage(lines); break;
+                default: return match;
+            }
+        } catch (e) {
+            logWarning('COMPONENT', `Error procesando bloque ${openTag}`, e.message);
+            return match;
+        }
+
+        const placeholder = `___RICH_BLOCK_${counter}___`;
+        blocks[placeholder] = html;
+        counter++;
+        BUILD_STATS.richBlocksRendered = (BUILD_STATS.richBlocksRendered || 0) + 1;
+        return placeholder;
+    });
+
+    return { text, blocks };
+}
+
 /**
  * Formats plain text from Google Sheets into structured HTML.
  * Handles paragraphs, lists, and headings.
@@ -196,7 +374,10 @@ function renderLayout(content, meta = {}) {
 function formatContent(text, contextSlug = 'unknown') {
     if (!text) return { html: '', faqs: [] };
 
-    const lines = text.split(/\r?\n/);
+    // Pre-process rich component blocks before line-by-line parsing
+    const { text: processedText, blocks } = processSpecialBlocks(text);
+
+    const lines = processedText.split(/\r?\n/);
     let html = '';
     let currentList = [];
     let faqs = [];
@@ -365,7 +546,13 @@ function formatContent(text, contextSlug = 'unknown') {
 
     closeList();
     closeFaq();
-    
+
+    // Restore rich component blocks from placeholders
+    Object.entries(blocks).forEach(([placeholder, blockHtml]) => {
+        html = html.replace(`<p style="margin-bottom: 1.5rem; line-height: 1.8;">${placeholder}</p>`, blockHtml);
+        html = html.replace(placeholder, blockHtml); // fallback
+    });
+
     return { html, faqs };
 }
 
@@ -844,10 +1031,12 @@ Sitemap: ${DOMAIN}/sitemap.xml`;
     console.log(`FAQs Detectadas:   ${BUILD_STATS.faqsDetected}`);
     console.log(`FAQs Descartadas:  ${BUILD_STATS.faqsDiscarded}`);
     console.log(`CTAs Renderizados: ${BUILD_STATS.ctasRendered}`);
+    console.log(`Bloques Enriquecidos (Tweet/PDF/Tabla/Imagen): ${BUILD_STATS.richBlocksRendered}`);
     console.log(`Links Internos Insertados: ${BUILD_STATS.internalLinksInserted}`);
     console.log(`Bloques Recomendados Generados: ${BUILD_STATS.recommendedBlocksGenerated}`);
     console.log(`Posts sin Recomendaciones: ${BUILD_STATS.postsWithoutRecommendations}`);
     console.log(`Warnings Totales:  ${BUILD_STATS.warnings.length}`);
+
     if (BUILD_STATS.warnings.length > 0) {
         console.log('\nDetalle de Warnings:');
         BUILD_STATS.warnings.forEach(w => console.log(` - ${w}`));
