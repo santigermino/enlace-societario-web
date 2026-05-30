@@ -442,3 +442,29 @@
     text-align: center;
     max-width: 80vw;
 }
+
+/* ============================================================
+   POST HERO IMAGE (INDIVIDUAL ARTICLE)
+   ============================================================ */
+.post-hero-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+.post-hero-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    object-fit: contain;
+}
+@media (max-width: 768px) {
+    .post-hero-wrapper {
+        padding: 0 !important;
+    }
+    .post-hero-img {
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
