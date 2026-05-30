@@ -10,14 +10,11 @@
         <img src="{{image_url}}" alt="{{post_title}} - Enlace Societario" class="post-hero-img">
     </div>
 
-    <header class="post-header"
-        style="padding: 4rem 0 3rem; background: #fff; border-bottom: 1px solid #eee; margin-bottom: 3rem;">
+    <header class="post-header">
         <div class="container" style="max-width: 800px;">
-            <span class="category-tag"
-                style="display: inline-block; padding: 0.25rem 0.75rem; background: var(--color-accent); color: white; border-radius: 4px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 1.5rem;">{{category}}</span>
-            <h1 style="font-size: 3.5rem; line-height: 1.2; margin-bottom: 1.5rem; color: var(--color-primary);">
-                {{title}}</h1>
-            <div class="meta" style="color: #777; font-size: 1rem; display: flex; gap: 1rem; align-items: center;">
+            <span class="category-tag">{{category}}</span>
+            <h1 class="post-title">{{title}}</h1>
+            <div class="post-meta">
                 <span class="author">Por <strong>{{author_with_link}}</strong></span>
                 <span class="divider" style="color: #ccc;">|</span>
                 <time datetime="{{date_iso}}">{{date_readable}}</time>

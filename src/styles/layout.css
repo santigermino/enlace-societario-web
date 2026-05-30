@@ -399,17 +399,17 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
 
     /* Mobile Menu Toggle Color Logic */
     /* When transparency is forced, make the hamburger white so it contrasts with dark heroes */
-    .main-header:not(.is-scrolled):not(.is-open) .mobile-menu-toggle {
+    body.has-transparent-nav .main-header:not(.is-scrolled):not(.is-open) .mobile-menu-toggle {
         color: var(--color-text-white) !important;
         background-color: transparent !important;
     }
 
     /* Logo logic: show white logo if transparent, dark if solid/scrolled */
-    .main-header:not(.is-scrolled):not(.is-open) .logo-dark {
+    body.has-transparent-nav .main-header:not(.is-scrolled):not(.is-open) .logo-dark {
         display: none !important;
     }
 
-    .main-header:not(.is-scrolled):not(.is-open) .logo-white {
+    body.has-transparent-nav .main-header:not(.is-scrolled):not(.is-open) .logo-white {
         display: block !important;
     }
 
