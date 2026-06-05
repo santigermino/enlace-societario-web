@@ -164,7 +164,7 @@ function renderLayout(content, meta = {}) {
     let layout = readTemplate('layout.html');
 
     // Default Fallbacks
-    const domain = 'https://enlacesocietario.com';
+    const domain = 'https://www.enlacesocietario.com';
     const title = meta.title || 'Constitución de Sociedades en Argentina | Enlace Societario';
     const description = meta.description || 'Especialistas en constitución, reforma y regularización de sociedades en Argentina. Asesoramiento legal y contable con más de 20 años de experiencia.';
     const canonical = meta.canonical || domain;
@@ -632,7 +632,7 @@ async function fetchBlogData() {
 async function build() {
     console.log('Starting build...');
 
-    const DOMAIN = 'https://enlacesocietario.com';
+    const DOMAIN = 'https://www.enlacesocietario.com';
     const sitemapEntries = [];
 
     // Clean/Ensure Output Dir
@@ -1016,7 +1016,7 @@ Sitemap: ${DOMAIN}/sitemap.xml`;
         if (canonicals.length > 1) errors.push(`Multiple <link rel="canonical"> tags (${canonicals.length})`);
 
         // Consistency check
-        if (content.includes('www.enlacesocietario.com')) errors.push('Found "www" in URLs');
+        if (content.includes('href="https://enlacesocietario.com"')) errors.push('Found non-www URL in href');
 
         if (errors.length > 0) {
             console.warn(`[AUDIT WARNING] File: ${file}\n - ${errors.join('\n - ')}`);

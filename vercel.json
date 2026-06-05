@@ -1,6 +1,30 @@
 {
     "cleanUrls": true,
     "trailingSlash": false,
+    "redirects": [
+        {
+            "source": "/(.*)",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "enlacesocietario.com"
+                }
+            ],
+            "destination": "https://www.enlacesocietario.com/$1",
+            "permanent": true
+        },
+        {
+            "source": "/(.*)",
+            "has": [
+                {
+                    "type": "host",
+                    "value": "enlacesocietario-web.vercel.app"
+                }
+            ],
+            "destination": "https://www.enlacesocietario.com/$1",
+            "permanent": true
+        }
+    ],
     "routes": [
         {
             "src": "/404",
