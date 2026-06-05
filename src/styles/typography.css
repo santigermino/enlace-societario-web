@@ -56,7 +56,7 @@ a {
     text-align: center;
 }
 
-.text-center p {
+.text-center p, p.text-center {
     margin-inline: auto;
 }
 
