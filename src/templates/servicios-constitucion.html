@@ -1,16 +1,657 @@
-<section class="hero text-center" style="padding: 6rem 0; background-color: var(--color-primary); color: white;">
+<!-- Shared Background Wrapper for Hero & Metrics -->
+<div class="hero-wrapper"
+    style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/images/hero-bg.webp'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
+    <section class="hero" style="background: transparent; padding-bottom: 2rem;">
+        <div class="container" style="text-align: center;">
+            <div class="hero-content" style="margin: 0 auto; max-width: 800px;">
+                <h1>Constitución de Sociedades</h1>
+                <p style="font-size: 1.125rem; color: var(--color-text-light);">Creamos tu sociedad de forma ágil y segura. Te asesoramos en la elección de la figura jurídica (SRL, SA, SAS) y gestionamos todo el proceso registral.</p>
+                <div style="margin-top: 2rem;">
+                    <a href="#contact-form" class="btn btn-primary" title="Solicitar asesoramiento">Solicitar Asesoramiento</a>
+                    <a href="#tipos-societarios" class="btn btn-ghost" style="margin-left: 1rem;" title="Ver tipos societarios">Ver Tipos de Sociedades</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section: Clean Background -->
+    <section class="section metrics-section-clean" style="color: white; border-top: 1px solid rgba(255,255,255,0.1); padding: 3rem 0;">
+        <div class="container">
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <h3>+20</h3>
+                    <p style="font-size: 0.9rem; letter-spacing: 0.05em; text-transform: uppercase;">Años de Experiencia</p>
+                </div>
+                <div class="metric-item">
+                    <h3>+1.200</h3>
+                    <p style="font-size: 0.9rem; letter-spacing: 0.05em; text-transform: uppercase;">Sociedades Constituidas</p>
+                </div>
+                <div class="metric-item">
+                    <h3>+300</h3>
+                    <p style="font-size: 0.9rem; letter-spacing: 0.05em; text-transform: uppercase;">Reformas Societarias</p>
+                </div>
+                <div class="metric-item">
+                    <h3>+97%</h3>
+                    <p style="font-size: 0.9rem; letter-spacing: 0.05em; text-transform: uppercase;">Satisfacción Clientes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- #2 SITUACIONES FRECUENTES -->
+<section class="section">
     <div class="container">
-        <h1>Constitución de Sociedades</h1>
-        <p style="max-width: 800px; margin: 0 auto; font-size: 1.125rem;">Creamos tu sociedad de forma ágil y segura. Te asesoramos en la elección de la figura jurídica (SRL, SA, SAS) y gestionamos todo el proceso registral.</p>
+        <h2 class="text-center" style="margin-bottom: 3rem;">Muchos clientes llegan a Enlace porque...</h2>
+        <div class="grid-2" style="align-items: center; gap: 4rem;">
+            <div class="text-center">
+                <img src="/images/profesional-pensativo.png" alt="Profesional pensando sobre estructuras societarias" style="max-width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md);">
+            </div>
+            <div>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li style="display: flex; align-items: center; gap: 1rem; background: #FAFAFA; padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-accent);">
+                        <i class="fas fa-times" style="color: var(--color-primary); opacity: 0.7;"></i>
+                        <span style="font-size: 1.05rem; color: var(--color-text-main); font-weight: 500;">No saben qué sociedad les conviene</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 1rem; background: #FAFAFA; padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-accent);">
+                        <i class="fas fa-times" style="color: var(--color-primary); opacity: 0.7;"></i>
+                        <span style="font-size: 1.05rem; color: var(--color-text-main); font-weight: 500;">Quieren limitar responsabilidad patrimonial</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 1rem; background: #FAFAFA; padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-accent);">
+                        <i class="fas fa-times" style="color: var(--color-primary); opacity: 0.7;"></i>
+                        <span style="font-size: 1.05rem; color: var(--color-text-main); font-weight: 500;">Necesitan incorporar socios</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 1rem; background: #FAFAFA; padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-accent);">
+                        <i class="fas fa-times" style="color: var(--color-primary); opacity: 0.7;"></i>
+                        <span style="font-size: 1.05rem; color: var(--color-text-main); font-weight: 500;">Buscan formalizar un negocio ya operativo</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 1rem; background: #FAFAFA; padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-accent);">
+                        <i class="fas fa-times" style="color: var(--color-primary); opacity: 0.7;"></i>
+                        <span style="font-size: 1.05rem; color: var(--color-text-main); font-weight: 500;">Necesitan comenzar a facturar rápidamente</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 1rem; background: #FAFAFA; padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-accent);">
+                        <i class="fas fa-times" style="color: var(--color-primary); opacity: 0.7;"></i>
+                        <span style="font-size: 1.05rem; color: var(--color-text-main); font-weight: 500;">Quieren evitar errores en la constitución</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 1rem; background: #FAFAFA; padding: 0.75rem 1.25rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-accent);">
+                        <i class="fas fa-times" style="color: var(--color-primary); opacity: 0.7;"></i>
+                        <span style="font-size: 1.05rem; color: var(--color-text-main); font-weight: 500;">Necesitan acompañamiento para entender todo el proceso</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </section>
 
+<!-- #3 TIPOS SOCIETARIOS (Interactive) -->
+<section id="tipos-societarios" class="section section-bg-alt">
+    <div class="container">
+        <div class="text-center" style="margin-bottom: 4rem;">
+            <p class="uppercase text-accent" style="margin-bottom: 1rem; font-weight: 600;">Estructuras Societarias</p>
+            <h2>Elige la figura legal correcta para tu proyecto</h2>
+        </div>
+
+        <div class="societarios-component">
+            <!-- Desktop Menu -->
+            <div class="sc-menu desktop-only">
+                <button class="sc-btn is-active" data-tab="srl">SRL <i class="fas fa-chevron-right"></i></button>
+                <button class="sc-btn" data-tab="sa">SA <i class="fas fa-chevron-right"></i></button>
+                <button class="sc-btn" data-tab="sas">SAS <i class="fas fa-chevron-right"></i></button>
+                <button class="sc-btn" data-tab="fundaciones">Fundaciones y Asociaciones <i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="sc-panels">
+                <!-- Panel SRL -->
+                <div class="sc-panel is-active" id="panel-srl">
+                    <button class="sc-mobile-header mobile-only is-active" data-tab="srl">SRL <i class="fas fa-chevron-down"></i></button>
+                    <div class="sc-content">
+                        <h3 class="sc-title">Sociedad de Responsabilidad Limitada (SRL)</h3>
+                        <p class="sc-desc">Suele ser una alternativa práctica y flexible para estructuras operativas medianas.</p>
+                        
+                        <div class="sc-grid">
+                            <div class="sc-feature">
+                                <i class="fas fa-users sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Socios:</strong> Entre 2 y 50</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-briefcase sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Administración:</strong> 1 o más gerentes</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-clock sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Mandato:</strong> Gerente con mandato indefinido</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-money-bill-wave sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Capital:</strong> No tiene capital mínimo exigido</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-shield-alt sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Responsabilidad:</strong> Los socios limitan su responsabilidad</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-file-contract sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Inscripción:</strong> Entrada o salida de un socio debe inscribirse</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-file-invoice sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Balances:</strong> No presenta balances en IGJ / DPPJ</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-user-shield sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Flexibilidad:</strong> Se puede estipular la no incorporación de herederos</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 2rem;">
+                            <a href="#contact-form" class="btn btn-primary">INICIAR TRÁMITE <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel SA -->
+                <div class="sc-panel" id="panel-sa">
+                    <button class="sc-mobile-header mobile-only" data-tab="sa">SA <i class="fas fa-chevron-down"></i></button>
+                    <div class="sc-content">
+                        <h3 class="sc-title">Sociedad Anónima (SA)</h3>
+                        <p class="sc-desc">Indicada para estructuras más corporativas o empresas con mayor escala o proyección de crecimiento, permitiendo la incorporación de inversores y estructuras accionarias más complejas.</p>
+                        
+                        <div class="sc-grid">
+                            <div class="sc-feature">
+                                <i class="fas fa-users sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Socios:</strong> 2 o más</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-briefcase sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Administración:</strong> 1 o más titulares. Igual número de suplentes</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-sync-alt sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Directorio:</strong> Renovación cada 3 años</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-shield-alt sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Responsabilidad:</strong> Los socios limitan su responsabilidad</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-file-contract sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Cesión:</strong> Entrada o salida de un socio no requiere inscribirse en IGJ/DPPJ</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-file-invoice sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Balances:</strong> Presenta balances ante IGJ / DPPJ</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 2rem;">
+                            <a href="#contact-form" class="btn btn-primary">INICIAR TRÁMITE <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel SAS -->
+                <div class="sc-panel" id="panel-sas">
+                    <button class="sc-mobile-header mobile-only" data-tab="sas">SAS <i class="fas fa-chevron-down"></i></button>
+                    <div class="sc-content">
+                        <h3 class="sc-title">Sociedad por Acciones Simplificada (SAS)</h3>
+                        <p class="sc-desc">Dependiendo del caso y la jurisdicción, puede analizarse como alternativa para ciertos proyectos específicos.</p>
+                        
+                        <div class="sc-grid">
+                            <div class="sc-feature">
+                                <i class="fas fa-user sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Socios:</strong> Puede ser de 1 solo socio</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-briefcase sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Administración:</strong> 1 titular y 1 suplente</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-clock sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Mandato:</strong> Administrador con mandato indefinido</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-money-bill-wave sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Capital:</strong> 2 salarios mínimos vitales y móviles</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-shield-alt sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Responsabilidad:</strong> Los socios limitan su responsabilidad</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-laptop sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Digitalización:</strong> El estatuto y libros son exclusivamente en formato digital</div>
+                            </div>
+                            <div class="sc-feature">
+                                <i class="fas fa-file-contract sc-icon"></i>
+                                <div class="sc-feat-text"><strong>Cesión:</strong> Entrada o salida de un socio no requiere inscribirse en IGJ/DPPJ</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 2rem;">
+                            <a href="#contact-form" class="btn btn-primary">INICIAR TRÁMITE <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Fundaciones -->
+                <div class="sc-panel" id="panel-fundaciones">
+                    <button class="sc-mobile-header mobile-only" data-tab="fundaciones">Fundaciones y Asociaciones <i class="fas fa-chevron-down"></i></button>
+                    <div class="sc-content">
+                        <h3 class="sc-title">Fundaciones y Asociaciones Civiles</h3>
+                        <p class="sc-desc">Las ONG (organizaciones no gubernamentales) pueden adoptar la forma jurídica de una Asociación Civil o una Fundación. Ambas están reguladas por el Código Civil y Comercial de la Nación.</p>
+                        <p class="sc-desc">Para lograr sus fines, la ONG puede gozar de ciertas exenciones impositivas en el impuesto al valor agregado (IVA), impuesto a las ganancias y el impuesto sobre los ingresos brutos siempre y cuando los ingresos que perciba la entidad sean destinados al objeto previsto en el estatuto y en ningún caso se distribuyan, directa o indirectamente, entre los socios.</p>
+                        <div style="margin-top: 2rem;">
+                            <a href="#contact-form" class="btn btn-primary">INICIAR TRÁMITE <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 3rem; background-color: #FAFAFA; border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent); padding: 1.5rem 2rem; border-radius: var(--radius-sm); max-width: 900px; margin-left: auto; margin-right: auto; text-align: center;">
+            <p style="margin: 0; font-size: 1.1rem; color: var(--color-text-main);"><strong>Recomendación frecuente:</strong> La mayoría de las pymes y empresas familiares suelen optar por una SRL debido a su simplicidad operativa y flexibilidad.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Official Organisms Section (Autoridad) -->
+<section class="section" style="padding: 3rem 0; background-color: var(--color-bg-body); border-bottom: 1px solid var(--color-border); border-top: 1px solid var(--color-border);">
+    <div class="container text-center">
+        <p style="font-size: 0.9rem; text-transform: uppercase; color: var(--color-text-main); margin-bottom: 2rem; letter-spacing: 0.1em; font-weight: 600; width: 100%;">Gestión ante organismos oficiales</p>
+        <div class="institutional-logos" style="display: flex; justify-content: center; align-items: center; gap: 3rem; flex-wrap: wrap;">
+            <img src="/images/IGJ.webp" alt="Logo IGJ - Inspección General de Justicia" title="Inspección General de Justicia" style="height: 90px; width: auto; filter: grayscale(100%); transition: filter 0.3s; cursor: pointer;" onmouseover="this.style.filter='grayscale(0%)'" onmouseout="this.style.filter='grayscale(100%)'">
+            <img src="/images/DPPJ.webp" alt="Logo DPPJ - Dirección Provincial de Personas Jurídicas" title="Dirección Provincial de Personas Jurídicas" style="height: 90px; width: auto; filter: grayscale(100%); transition: filter 0.3s; cursor: pointer;" onmouseover="this.style.filter='grayscale(0%)'" onmouseout="this.style.filter='grayscale(100%)'">
+            <img src="/images/ARCA.webp" alt="Logo ARCA - Agencia de Recaudación y Control Aduanero" title="Agencia de Recaudación y Control Aduanero" style="height: 90px; width: auto; filter: grayscale(100%); transition: filter 0.3s; cursor: pointer;" onmouseover="this.style.filter='grayscale(0%)'" onmouseout="this.style.filter='grayscale(100%)'">
+            <img src="/images/BOLETIN.webp" alt="Logo Boletín Oficial de la República Argentina" title="Boletín Oficial de la República Argentina" style="height: 90px; width: auto; filter: grayscale(100%); transition: filter 0.3s; cursor: pointer;" onmouseover="this.style.filter='grayscale(0%)'" onmouseout="this.style.filter='grayscale(100%)'">
+        </div>
+    </div>
+</section>
+
+<!-- ¿Cómo trabajamos? -->
 <section class="section">
+    <div class="container">
+        <h2 class="text-center" style="margin-bottom: 3rem;">¿CÓMO TRABAJAMOS?</h2>
+        <div class="methodology-list">
+            <div class="methodology-card">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h3>Análisis inicial</h3>
+                    <p>Definimos tus necesidades legales y operativas.</p>
+                </div>
+            </div>
+            <div class="methodology-card">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h3>Definición de estructura</h3>
+                    <p>Seleccionamos la mejor figura legal para tu proyecto.</p>
+                </div>
+            </div>
+            <div class="methodology-card">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h3>Preparación documental</h3>
+                    <p>Redactamos el estatuto y organizamos los requisitos.</p>
+                </div>
+            </div>
+            <div class="methodology-card">
+                <div class="step-number">04</div>
+                <div class="step-content">
+                    <h3>Inscripción y alta</h3>
+                    <p>Realizamos el trámite y te entregamos la sociedad lista.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- #3 MODALIDADES -->
+<section class="section section-bg-alt">
+    <div class="container">
+        <div class="text-center" style="margin-bottom: 4rem;">
+            <h2>Nos adaptamos a tus tiempos</h2>
+            <p style="max-width: 700px; margin: 0 auto; color: var(--color-text-body);">Dependiendo de la necesidad del cliente, del tipo de trámite y del organismo correspondiente, existen distintas modalidades de presentación. Consultanos.</p>
+        </div>
+
+        <div class="modalities-grid">
+            <div class="modality-card">
+                <div class="modality-icon"><i class="fas fa-calendar-check"></i></div>
+                <div class="modality-content">
+                    <h3>Modalidad Estándar</h3>
+                    <p>Ideal para proyectos en fase de planificación. Gestionamos tu trámite con los plazos habituales del organismo interviniente, asegurando calidad y precisión.</p>
+                </div>
+            </div>
+            <div class="modality-card urgent">
+                <div class="modality-icon"><i class="fas fa-rocket"></i></div>
+                <div class="modality-content">
+                    <h3>Modalidad Urgente</h3>
+                    <p>Prioridad máxima para necesidades inmediatas. Aceleramos los tiempos administrativos utilizando vías preferenciales para obtener resoluciones rápidas.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- #4 QUÉ INCLUYE -->
+<section class="section">
+    <div class="container">
+        <div class="text-center" style="margin-bottom: 4rem;">
+            <h2>¿Qué incluye nuestro servicio?</h2>
+        </div>
+        <div class="includes-grid">
+            <div class="include-card">
+                <i class="fas fa-comments"></i>
+                <h3>Asesoramiento inicial</h3>
+                <p>Analizamos qué estructura se adapta mejor a tu actividad y objetivos a futuro.</p>
+            </div>
+            <div class="include-card">
+                <i class="fas fa-file-signature"></i>
+                <h3>Redacción documental</h3>
+                <p>Estatuto, actas, formularios y documentación societaria requerida por el organismo.</p>
+            </div>
+            <div class="include-card">
+                <i class="fas fa-building"></i>
+                <h3>Gestión ante organismos</h3>
+                <p>Inscripción completa ante la IGJ, DPPJ y organismos complementarios pertinentes.</p>
+            </div>
+            <div class="include-card">
+                <i class="fas fa-handshake"></i>
+                <h3>Coordinación profesional</h3>
+                <p>Articulamos escribanía, firmas y certificaciones necesarias de principio a fin.</p>
+            </div>
+            <div class="include-card">
+                <i class="fas fa-id-card"></i>
+                <h3>Alta impositiva y CUIT</h3>
+                <p>Realizamos el alta de AFIP e Ingresos Brutos para que puedas operar de inmediato.</p>
+            </div>
+            <div class="include-card">
+                <i class="fas fa-book"></i>
+                <h3>Libros societarios</h3>
+                <p>Te asesoramos sobre la provisión, compra y rúbrica de los libros legales obligatorios.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- #5 IDEAL PARA -->
+<section class="section section-bg-alt">
+    <div class="container text-center">
+        <h2 style="margin-bottom: 2rem;">Ideal Para</h2>
+        <div class="chips-container">
+            <span class="chip">Emprendedores</span>
+            <span class="chip">Pymes</span>
+            <span class="chip">Profesionales</span>
+            <span class="chip">Empresas Familiares</span>
+            <span class="chip">Startups</span>
+            <span class="chip">ONGs</span>
+        </div>
+    </div>
+</section>
+
+<!-- #7 HERRAMIENTA INTERACTIVA & DIFERENCIALES -->
+<section class="section section-dark" style="padding: 5rem 0;">
+    <div class="container">
+        <div class="grid-2" style="align-items: center; gap: 4rem;">
+            <div>
+                <h2 style="color: white; margin-bottom: 1.5rem;">¿Todavía no estás seguro qué tipo de sociedad te conviene?</h2>
+                <p style="color: var(--color-text-light); font-size: 1.15rem; margin-bottom: 2.5rem;">Descubrí qué tipo de sociedad puede adaptarse mejor a tu proyecto en menos de 2 minutos.</p>
+                <a href="/herramientas/que-tipo-de-sociedad-te-conviene" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">Probar Herramienta Gratuita</a>
+            </div>
+            <div class="text-center">
+                <img src="/images/profesional-orientado.png" alt="Herramienta para elegir tipo de sociedad" style="max-width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-lg);">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Diferenciales (Reused Comparison Section) -->
+<section class="comparison-section section-bg-alt">
+    <div class="container container-narrow">
+        <div class="text-center">
+            <h2 class="comp-section-title">¿Por qué elegir Enlace Societario?</h2>
+            <p class="comp-section-subtitle">No somos un estudio jurídico tradicional. Combinamos el conocimiento legal experto con la agilidad de una consultora de negocios moderna, enfocándonos en resultados rápidos y claros.</p>
+        </div>
+
+        <div class="comparison-header">
+            <div class="comp-header-col comp-col-feature">ASPECTO</div>
+            <div class="comp-header-col comp-col-traditional">ESTUDIO TRADICIONAL</div>
+            <div class="comp-header-col comp-col-enlace">ENLACE SOCIETARIO</div>
+        </div>
+
+        <div class="comparison-cards-list">
+            <!-- Card 1 -->
+            <div class="comparison-card">
+                <div class="comp-col comp-col-feature">
+                    <h3 class="comp-feature-title">Comunicación</h3>
+                </div>
+                <div class="comp-col comp-col-traditional">
+                    <span class="comp-mobile-label">TRADICIONAL</span>
+                    <p class="comp-text-traditional">Lenta y con lenguaje legal complejo que el cliente no entiende.</p>
+                </div>
+                <div class="comp-col comp-col-enlace">
+                    <span class="comp-mobile-label">ENLACE</span>
+                    <div class="comp-enlace-wrapper">
+                        <i class="fas fa-check-circle comp-check-icon"></i>
+                        <p class="comp-text-enlace">Fluida, proactiva y explicando cada paso en lenguaje claro y de negocios.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="comparison-card">
+                <div class="comp-col comp-col-feature">
+                    <h3 class="comp-feature-title">Tiempos</h3>
+                </div>
+                <div class="comp-col comp-col-traditional">
+                    <span class="comp-mobile-label">TRADICIONAL</span>
+                    <p class="comp-text-traditional">Trámites demorados por falta de seguimiento diario o tecnología.</p>
+                </div>
+                <div class="comp-col comp-col-enlace">
+                    <span class="comp-mobile-label">ENLACE</span>
+                    <div class="comp-enlace-wrapper">
+                        <i class="fas fa-check-circle comp-check-icon"></i>
+                        <p class="comp-text-enlace">Gestión ágil apoyada en procesos optimizados para cumplir plazos exactos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="comparison-card">
+                <div class="comp-col comp-col-feature">
+                    <h3 class="comp-feature-title">Enfoque</h3>
+                </div>
+                <div class="comp-col comp-col-traditional">
+                    <span class="comp-mobile-label">TRADICIONAL</span>
+                    <p class="comp-text-traditional">Puramente teórico o litigioso, perdiendo de vista el negocio.</p>
+                </div>
+                <div class="comp-col comp-col-enlace">
+                    <span class="comp-mobile-label">ENLACE</span>
+                    <div class="comp-enlace-wrapper">
+                        <i class="fas fa-check-circle comp-check-icon"></i>
+                        <p class="comp-text-enlace">Comercial y estratégico, cuidando que la legalidad impulse el crecimiento.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="comparison-card">
+                <div class="comp-col comp-col-feature">
+                    <h3 class="comp-feature-title">Visibilidad</h3>
+                </div>
+                <div class="comp-col comp-col-traditional">
+                    <span class="comp-mobile-label">TRADICIONAL</span>
+                    <p class="comp-text-traditional">El cliente nunca sabe en qué estado se encuentra su expediente.</p>
+                </div>
+                <div class="comp-col comp-col-enlace">
+                    <span class="comp-mobile-label">ENLACE</span>
+                    <div class="comp-enlace-wrapper">
+                        <i class="fas fa-check-circle comp-check-icon"></i>
+                        <p class="comp-text-enlace">Actualizaciones constantes y reportes transparentes del avance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center" style="margin-top: 3rem;">
+            <p class="comp-closing-text">Tu tiempo vale. Nosotros lo respetamos resolviendo lo complejo de forma simple.</p>
+        </div>
+    </div>
+</section>
+
+<!-- #8 FAQs -->
+<section class="section">
+    <div class="container">
+        <h2 class="text-center" style="margin-bottom: 3rem;">Preguntas Frecuentes sobre Constitución</h2>
+        <div class="faq-section" itemscope itemtype="https://schema.org/FAQPage">
+            <!-- FAQ 1 -->
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="faq-question" itemprop="name">¿Cuánto tarda en constituirse una sociedad?</summary>
+                <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div>
+                        <p itemprop="text">Depende del tipo societario, la jurisdicción y la modalidad de presentación. Existen procesos estándar y urgentes, y puede variar entre 10 y 30 días.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- FAQ 2 -->
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="faq-question" itemprop="name">¿Qué sociedad me conviene?</summary>
+                <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div>
+                        <p itemprop="text">Depende de la actividad, cantidad de socios, proyección y necesidades del negocio.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- FAQ 3 -->
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="faq-question" itemprop="name">¿Necesita intervención de un escribano o abogado?</summary>
+                <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div>
+                        <p itemprop="text">En algunos casos sí. Dependerá del tipo de sociedad y del trámite específico.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- FAQ 4 -->
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="faq-question" itemprop="name">¿Puedo constituir una sociedad si soy monotributista?</summary>
+                <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div>
+                        <p itemprop="text">Sí. Muchas personas constituyen sociedades aun estando inscriptas como monotributistas.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- FAQ 5 -->
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="faq-question" itemprop="name">¿La sociedad incluye CUIT?</summary>
+                <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div>
+                        <p itemprop="text">Sí. Siempre gestionamos el alta impositiva en todas nuestras constituciones para que puedas comenzar a operar de forma inmediata.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- FAQ 6 -->
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="faq-question" itemprop="name">¿Qué documentación necesito para constituir una sociedad?</summary>
+                <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div>
+                        <p itemprop="text">Solo necesitamos los datos personales de los socios, la idea principal del objeto social, el monto del capital inicial y la sede legal elegida. Con eso, nosotros te guiamos paso a paso y nos encargamos de todo el armado legal y el expediente.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- FAQ 7 -->
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="faq-question" itemprop="name">¿Puedo hacer el trámite sin tener que ir personalmente?</summary>
+                <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div>
+                        <p itemprop="text">Sí. La gran mayoría de los trámites pueden gestionarse de forma 100% remota. Contamos con herramientas digitales y procuradores que nos permiten avanzar con el expediente sin requerir tu presencia física constantemente.</p>
+                    </div>
+                </div>
+            </details>
+
+            <!-- FAQ 8 -->
+            <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <summary class="faq-question" itemprop="name">¿Qué pasa después de constituir mi sociedad?</summary>
+                <div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div>
+                        <p itemprop="text">Luego de constituida, podés continuar trabajando con nosotros a través de nuestro servicio contable y societario mensual. Nos convertimos en tu estudio de confianza para el día a día operativo.</p>
+                    </div>
+                </div>
+            </details>
+        </div>
+    </div>
+</section>
+
+<!-- #9 Contact Form Restored -->
+<section id="contact-form" class="section section-bg-alt">
     <div class="container" style="max-width: 800px;">
-        <div style="background: #FAFAFA; padding: 3rem; border-radius: var(--radius-md); text-align: center;">
-            <h2>Sección en desarrollo</h2>
-            <p style="color: var(--color-text-body); margin-bottom: 2rem;">El contenido detallado de este servicio se publicará próximamente.</p>
-            <a href="/servicios" class="btn btn-primary">Volver a Servicios</a>
+        <div class="text-center" style="margin-bottom: 3rem;">
+            <h2>¿Listo para constituir tu sociedad?</h2>
+            <p>Coordiná una consulta y definamos juntos la estructura más adecuada para tu proyecto.</p>
+        </div>
+
+        <div class="legacy-form-container">
+            <form class="card" style="border-top: none; box-shadow: var(--shadow-lg);" action="#" method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+
+            <div class="form-group">
+                <label for="empresa">Empresa o Negocio</label>
+                <input type="text" id="empresa" name="empresa" required>
+            </div>
+
+            <div class="grid-2" style="gap: 1rem; grid-template-columns: 1fr 1fr; margin-bottom: 0;">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono / WhatsApp</label>
+                    <input type="tel" id="telefono" name="telefono" required>
+                </div>
+            </div>
+
+            <div class="grid-2" style="gap: 1rem; grid-template-columns: 1fr 1fr; margin-bottom: 0;">
+                <div class="form-group">
+                    <label for="servicio">Tipo de Servicio</label>
+                    <select id="servicio" name="servicio" required>
+                        <option value="">Seleccione una opción</option>
+                        <option value="constitucion">Constitución de sociedad</option>
+                        <option value="reforma">Reforma de una sociedad vigente</option>
+                        <option value="conflicto">Resolución de conflicto societario</option>
+                        <option value="otros">Otros trámites societarios</option>
+                        <option value="contable">Servicio contable e impositivo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ubicacion">Ubicación del trámite (Opcional)</label>
+                    <select id="ubicacion" name="ubicacion">
+                        <option value="">Seleccione una opción</option>
+                        <option value="CABA">CABA</option>
+                        <option value="Provincia">Provincia de Bs As</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Breve descripción de tu negocio o necesidad</label>
+                <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+            </div>
+
+            <div aria-hidden="true" style="position: absolute; left: -9999px;">
+                <label for="_honey">Leave this field empty</label>
+                <input type="text" name="_honey" id="_honey" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-messages" style="margin-top: 1rem; text-align: center; font-weight: 500;"></div>
+
+            <div style="margin-top: 1rem; text-align: center;">
+                <button type="submit" class="btn btn-primary" title="Enviar consulta para recibir asesoramiento" style="width: 100%;">Enviar Consulta</button>
+            </div>
+            </form>
         </div>
     </div>
 </section>

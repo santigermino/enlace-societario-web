@@ -92,7 +92,17 @@
                     <li><a href="/" class="nav-link" title="Ir al inicio">INICIO</a></li>
                     <li><a href="/nosotros" class="nav-link" title="Conocé nuestro equipo y trayectoria">Nosotros</a>
                     </li>
-                    <li><a href="/servicios" class="nav-link" title="Servicios societarios y contables">Servicios</a>
+                    <li class="nav-item-dropdown">
+                        <a href="/servicios" class="nav-link dropdown-toggle" title="Servicios societarios y contables"
+                            aria-haspopup="true" aria-expanded="false">Servicios <i class="fas fa-chevron-down"
+                                style="font-size: 0.7rem; margin-left: 0.25rem;"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/servicios/constitucion" title="Constitución de Sociedades">Constitución de Sociedades</a></li>
+                            <li><a href="/servicios/reformas" title="Reformas Societarias">Reformas Societarias</a></li>
+                            <li><a href="/servicios/regularizacion" title="Regularización de Sociedades">Regularización de Sociedades</a></li>
+                            <li><a href="/servicios/impositivos" title="Trámites Impositivos y Contables">Trámites Impositivos y Contables</a></li>
+                            <li><a href="/servicios/otros-tramites" title="Otros Trámites IGJ y DPPJ">Otros Trámites IGJ y DPPJ</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item-dropdown">
                         <a href="/herramientas" class="nav-link dropdown-toggle" title="Herramientas y validadores"
@@ -108,7 +118,7 @@
                     </li>
                     <li><a href="/blog" class="nav-link" title="Actualidad y novedades societarias">Blog</a></li>
                     <li><a href="/contacto" class="btn btn-primary"
-                            title="Solicitar asesoramiento personalizado">Solicitar Asesoramiento</a></li>
+                            title="Solicitar asesoramiento personalizado">Contacto</a></li>
                 </ul>
                 <button class="mobile-menu-toggle" aria-label="Abrir menú">
                     <i class="fas fa-bars"></i>
@@ -131,7 +141,27 @@
             <ul>
                 <li><a href="/" title="Ir al inicio">INICIO</a></li>
                 <li><a href="/nosotros" title="Conocé nuestro equipo y trayectoria">NOSOTROS</a></li>
-                <li><a href="/servicios" title="Servicios societarios y contables">SERVICIOS</a></li>
+                <li class="mobile-nav-dropdown">
+                    <div class="mobile-dropdown-header"
+                        style="display: flex; justify-content: space-between; align-items: center;">
+                        <a href="/servicios" title="Servicios societarios y contables">SERVICIOS</a>
+                        <i class="fas fa-plus mobile-dropdown-toggle"
+                            style="font-size: 1rem; color: var(--color-primary); cursor: pointer;"></i>
+                    </div>
+                    <ul class="mobile-dropdown-menu"
+                        style="display: none; padding-left: 1rem; margin-top: 0.5rem; list-style: none;">
+                        <li style="margin-bottom: 0.25rem;"><a href="/servicios/constitucion"
+                                style="font-size: 1.1rem; font-weight: 500;">CONSTITUCIÓN DE SOCIEDADES</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="/servicios/reformas"
+                                style="font-size: 1.1rem; font-weight: 500;">REFORMAS SOCIETARIAS</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="/servicios/regularizacion"
+                                style="font-size: 1.1rem; font-weight: 500;">REGULARIZACIÓN DE SOCIEDADES</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="/servicios/impositivos"
+                                style="font-size: 1.1rem; font-weight: 500;">TRÁMITES IMPOSITIVOS</a></li>
+                        <li style="margin-bottom: 0.25rem;"><a href="/servicios/otros-tramites"
+                                style="font-size: 1.1rem; font-weight: 500;">OTROS TRÁMITES</a></li>
+                    </ul>
+                </li>
                 <li class="mobile-nav-dropdown">
                     <div class="mobile-dropdown-header"
                         style="display: flex; justify-content: space-between; align-items: center;">
@@ -149,8 +179,7 @@
                 </li>
                 <li><a href="/blog" title="Actualidad y novedades societarias">BLOG</a></li>
                 <li style="margin-top: 1.5rem;">
-                    <a href="/contacto" class="btn btn-primary" title="Solicitar asesoramiento personalizado">Solicitar
-                        Asesoramiento</a>
+                    <a href="/contacto" class="btn btn-primary" title="Solicitar asesoramiento personalizado">Contacto</a>
                 </li>
             </ul>
         </nav>

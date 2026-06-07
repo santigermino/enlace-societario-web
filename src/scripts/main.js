@@ -242,4 +242,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    /* --- Societarios Tabs/Accordion --- */
+    const scButtons = document.querySelectorAll('.sc-btn, .sc-mobile-header');
+    if (scButtons.length > 0) {
+        scButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetTab = btn.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and panels
+                document.querySelectorAll('.sc-btn, .sc-mobile-header').forEach(b => b.classList.remove('is-active'));
+                document.querySelectorAll('.sc-panel').forEach(p => p.classList.remove('is-active'));
+                
+                // Add active class to corresponding desktop button, mobile header, and panel
+                document.querySelectorAll(`.sc-btn[data-tab="${targetTab}"], .sc-mobile-header[data-tab="${targetTab}"]`).forEach(b => b.classList.add('is-active'));
+                const panel = document.getElementById(`panel-${targetTab}`);
+                if (panel) {
+                    panel.classList.add('is-active');
+                }
+            });
+        });
+    }
+
+    /* --- Auto-select Service in Forms --- */
+    if (window.location.pathname.includes('/servicios/constitucion')) {
+        const serviceSelect = document.getElementById('servicio');
+        if (serviceSelect) {
+            serviceSelect.value = 'constitucion';
+        }
+    }
 });

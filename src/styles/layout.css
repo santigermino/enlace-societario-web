@@ -210,7 +210,7 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
 
 .dropdown-menu li a {
     display: block;
-    padding: var(--space-2) var(--space-6);
+    padding: 0.35rem 1.25rem;
     color: var(--color-primary);
     text-decoration: none;
     font-size: var(--text-sm);
