@@ -632,9 +632,6 @@ async function fetchBlogData() {
                 }
 
                 let currentContent = post.Content || '';
-                if (post.Slug === 'prorroga-moratoria-igj-balances-adeudados-2026') {
-                    currentContent = `[UPDATE]\n🔔 ACTUALIZACIÓN — 18 de junio de 2026\n\nLuego de la publicación inicial de este artículo, la Inspección General de Justicia oficializó la prórroga del régimen de regularización de balances adeudados mediante la Resolución General IGJ 6/2026, publicada en el Boletín Oficial.\n\nLa nueva resolución extiende el plazo hasta el 31 de diciembre de 2026, amplía el alcance del régimen e incorpora un nuevo sistema digital para la presentación de documentación.\n\nMás abajo te contamos todos los detalles actualizados.\n[/UPDATE]\n\n` + currentContent;
-                }
 
                 return {
                     ...post,
