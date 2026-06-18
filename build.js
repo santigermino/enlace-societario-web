@@ -328,6 +328,32 @@ function renderCompareImage(lines) {
 }
 
 /**
+ * Renders an UPDATE highlighted block.
+ * Lines: content
+ */
+function renderUpdateBlock(lines) {
+    let html = '';
+    lines.forEach((line, i) => {
+        if (i === 0 && line.toLowerCase().includes('actualización')) {
+            html += `<p class="update-block__title"><strong>${line}</strong></p>`;
+        } else {
+            html += `<p>${line}</p>`;
+        }
+    });
+
+    return `
+<div class="update-block" role="region" aria-label="Actualización destacada">
+    <div class="update-block__icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="update-block__content">
+        ${html}
+    </div>
+</div>
+`.trim();
+}
+
+/**
  * Pre-processes special block tags BEFORE the line-by-line parser.
  * Replaces [TAG]...[/TAG] with unique placeholders, returns { text, blocks }.
  * Supported: TWEET, PDF_PREVIEW, COMPARE_TABLE, COMPARE_IMAGE
@@ -336,7 +362,7 @@ function processSpecialBlocks(text) {
     const blocks = {};
     let counter = 0;
 
-    const blockRegex = /\[(TWEET|PDF_PREVIEW|COMPARE_TABLE|COMPARE_IMAGE)\]\r?\n([\s\S]*?)\r?\n\[\/(TWEET|PDF_PREVIEW|COMPARE_TABLE|COMPARE_IMAGE)\]/g;
+    const blockRegex = /\[(TWEET|PDF_PREVIEW|COMPARE_TABLE|COMPARE_IMAGE|UPDATE)\]\r?\n([\s\S]*?)\r?\n\[\/(TWEET|PDF_PREVIEW|COMPARE_TABLE|COMPARE_IMAGE|UPDATE)\]/g;
 
     text = text.replace(blockRegex, (match, openTag, content, closeTag) => {
         if (openTag !== closeTag) return match; // mismatched tags — leave as is
@@ -350,6 +376,7 @@ function processSpecialBlocks(text) {
                 case 'PDF_PREVIEW':   html = renderPdfPreview(lines);  break;
                 case 'COMPARE_TABLE': html = renderCompareTable(lines); break;
                 case 'COMPARE_IMAGE': html = renderCompareImage(lines); break;
+                case 'UPDATE':        html = renderUpdateBlock(lines); break;
                 default: return match;
             }
         } catch (e) {
@@ -536,6 +563,8 @@ function formatContent(text, contextSlug = 'unknown') {
             if (!inFaqSection) {
                 html += `<h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--color-primary); font-size: 1.4rem;">${line.replace(/^###\s*/, '')}</h3>\n`;
             }
+        } else if (line.startsWith('___RICH_BLOCK_')) {
+            html += `${line}\n`;
         } else if (isAllCaps || looksLikeHeading) {
             html += `<h2 style="margin-top: 2.5rem; margin-bottom: 1.25rem; color: var(--color-primary); font-size: 1.75rem;">${line}</h2>\n`;
         } else {
@@ -602,8 +631,14 @@ async function fetchBlogData() {
                     metaDescription += '...';
                 }
 
+                let currentContent = post.Content || '';
+                if (post.Slug === 'prorroga-moratoria-igj-balances-adeudados-2026') {
+                    currentContent = `[UPDATE]\n🔔 ACTUALIZACIÓN — 18 de junio de 2026\n\nLuego de la publicación inicial de este artículo, la Inspección General de Justicia oficializó la prórroga del régimen de regularización de balances adeudados mediante la Resolución General IGJ 6/2026, publicada en el Boletín Oficial.\n\nLa nueva resolución extiende el plazo hasta el 31 de diciembre de 2026, amplía el alcance del régimen e incorpora un nuevo sistema digital para la presentación de documentación.\n\nMás abajo te contamos todos los detalles actualizados.\n[/UPDATE]\n\n` + currentContent;
+                }
+
                 return {
                     ...post,
+                    Content: currentContent,
                     categoryName,
                     authorName: author.name,
                     authorBio: author.bio || '',
