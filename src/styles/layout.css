@@ -174,7 +174,7 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
     left: 50%;
     transform: translateX(-50%);
     background-color: white;
-    min-width: 260px; /* Wider to prevent wrapping */
+    min-width: 280px; /* Wider to prevent wrapping */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Softer, premium shadow */
     border-radius: var(--radius-md);
     padding: 0.5rem 0; /* Tighter vertical padding */
@@ -219,13 +219,15 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
 
 .dropdown-menu li a {
     display: block;
-    padding: 0.75rem 1.5rem; /* Better hit area, balanced spacing */
+    padding: 0.5rem 1.5rem; /* Reduced vertical padding */
     color: var(--color-primary);
     text-decoration: none;
     font-size: 0.9rem; /* Slightly refined size */
     font-weight: 500;
     letter-spacing: 0.02em; /* Subtle tracking */
+    text-align: left; /* Explicitly left-align to fix centering issue */
     transition: background-color 0.2s, color 0.2s;
+    line-height: 1.4;
 }
 
 .dropdown-menu li a:hover {
