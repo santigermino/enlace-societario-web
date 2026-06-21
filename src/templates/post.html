@@ -1,17 +1,9 @@
-<div class="container" style="margin-top: 2rem;">
-    <a href="/blog" class="back-link" title="Volver al listado de artículos del blog"
-        style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: var(--color-primary); font-weight: 600; font-size: 0.9rem; transition: all 0.2s ease;">
-        <i class="fas fa-arrow-left"></i> Volver al Blog
-    </a>
-</div>
+
 
 <article class="blog-post" style="padding-bottom: 2rem;">
-    <div class="container post-hero-wrapper" style="max-width: 1100px; margin: 2rem auto 0; padding: 0 1rem;">
-        <img src="{{image_url}}" alt="{{post_title}} - Enlace Societario" class="post-hero-img">
-    </div>
-
     <header class="post-header">
         <div class="container" style="max-width: 800px;">
+            {{breadcrumbs}}
             <span class="category-tag">{{category}}</span>
             <h1 class="post-title">{{title}}</h1>
             <div class="post-meta">
@@ -21,6 +13,10 @@
             </div>
         </div>
     </header>
+
+    <div class="container post-hero-wrapper" style="max-width: 900px; margin: 0 auto 2.5rem; padding: 0 1rem;">
+        <img src="{{image_url}}" alt="{{post_title}} - Enlace Societario" class="post-hero-img">
+    </div>
 
     <!-- 1. Cuerpo del artículo -->
     <div class="post-content container" style="max-width: 800px; line-height: 1.8; font-size: 1.2rem; color: #2c3e50;">

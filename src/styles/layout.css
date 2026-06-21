@@ -174,10 +174,10 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
     left: 50%;
     transform: translateX(-50%);
     background-color: white;
-    min-width: 220px;
-    box-shadow: var(--shadow-lg);
+    min-width: 260px; /* Wider to prevent wrapping */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Softer, premium shadow */
     border-radius: var(--radius-md);
-    padding: var(--space-2) 0;
+    padding: 0.5rem 0; /* Tighter vertical padding */
     list-style: none;
     margin: 0;
     opacity: 0;
@@ -208,18 +208,28 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
     margin-top: 0;
 }
 
+.dropdown-menu li {
+    margin: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
 .dropdown-menu li a {
     display: block;
-    padding: 0.35rem 1.25rem;
+    padding: 0.75rem 1.5rem; /* Better hit area, balanced spacing */
     color: var(--color-primary);
     text-decoration: none;
-    font-size: var(--text-sm);
+    font-size: 0.9rem; /* Slightly refined size */
     font-weight: 500;
-    transition: background-color 0.2s;
+    letter-spacing: 0.02em; /* Subtle tracking */
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .dropdown-menu li a:hover {
-    background-color: var(--color-bg-alt);
+    background-color: rgba(0, 0, 0, 0.02); /* More subtle hover */
     color: var(--color-accent);
 }
 
@@ -573,7 +583,7 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
         /* Higher than header */
         transform: translateX(-100%);
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        padding: 2rem;
+        padding: 1.5rem 1.5rem 2rem 1.5rem;
         display: none;
         /* Controlled by JS to manage display vs transform */
         flex-direction: column;
@@ -589,14 +599,16 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 3rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
 
     .mobile-menu-close {
         background: none;
         border: none;
-        font-size: 2.5rem;
-        /* Larger for better visibility */
+        font-size: 1.75rem;
+        font-weight: 300;
         color: var(--color-primary);
         cursor: pointer;
         padding: 0.5rem;
@@ -605,45 +617,67 @@ body.has-transparent-nav .main-header:not(.is-scrolled) .mobile-menu-toggle {
         justify-content: center;
     }
 
-    .mobile-nav ul {
+    .mobile-nav > ul {
         list-style: none;
         padding: 0;
     }
 
-    .mobile-nav ul li {
-        margin-bottom: 1.5rem;
+    .mobile-nav > ul > li {
+        margin-bottom: 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .mobile-nav > ul > li:last-child {
+        border-bottom: none;
     }
 
     .mobile-nav ul li a {
         display: block;
-        /* Full width touch area */
-        padding: 0.75rem 0;
-        /* Vertical hit area */
-        font-size: 1.35rem;
-        font-weight: 700;
+        padding: 1.15rem 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
         color: var(--color-primary);
         text-decoration: none;
         text-transform: uppercase;
-        transition: background-color 0.2s;
+        transition: background-color 0.2s, color 0.2s;
     }
 
     .mobile-nav ul li a:active {
-        background-color: rgba(0, 0, 0, 0.05);
-        /* Visual feedback on tap */
+        background-color: rgba(0, 0, 0, 0.03);
         border-radius: var(--radius-sm);
     }
 
     .mobile-nav .btn-primary {
-        display: inline-flex;
+        display: block !important;
+        text-align: center;
+        font-size: 1.05rem !important;
+        padding: 1.25rem !important;
+        font-weight: 600 !important;
+        width: 100% !important;
+        margin-top: 1.5rem;
+        border-radius: 8px !important;
+        letter-spacing: 0.05em;
+    }
+
+    .mobile-nav .mobile-dropdown-menu li {
+        border-bottom: none !important;
+        margin-bottom: 0 !important;
+    }
+
+    .mobile-nav .mobile-dropdown-menu a {
         font-size: 1rem !important;
-        padding: 0.6rem 1.2rem !important;
-        font-weight: 700 !important;
-        width: auto !important;
+        font-weight: 500 !important;
+        padding: 0.8rem 0 !important;
+        color: #4a5568 !important;
     }
 
     /* Mobile Dropdown */
     .mobile-dropdown-toggle {
         transition: transform 0.3s ease;
+        font-size: 0.9rem !important;
+        font-weight: 300;
+        padding: 0.5rem;
     }
 
     .mobile-nav-dropdown.is-active .mobile-dropdown-toggle {

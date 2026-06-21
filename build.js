@@ -610,10 +610,18 @@ async function fetchBlogData() {
         });
 
         // Process posts
+        const fallbackTitles = {
+            'tramites-societarios': 'Trámites Societarios',
+            'guias-y-consejos': 'Guías y Consejos',
+            'actualizaciones-normativas': 'Actualizaciones Normativas',
+            'casos-practicos': 'Casos Prácticos',
+            'preguntas-frecuentes': 'Preguntas Frecuentes'
+        };
+
         const posts = postsRaw
             .filter(post => post.Status && post.Status.toLowerCase().trim() === 'published')
             .map(post => {
-                const categoryName = categoriesMap[post.Category] || post.Category;
+                const categoryName = fallbackTitles[post.Category] || categoriesMap[post.Category] || post.Category;
                 const author = authorsMap[post.Author] || { name: post.Author };
 
                 // SEO Metadata logic
@@ -827,28 +835,132 @@ async function build() {
     });
 
     // Blog Pages
+    
     const posts = await fetchBlogData();
-    let blogListHtml = '';
 
+    // Configuration for Blog & Categories
+    const POSTS_PER_PAGE = 9;
+    const CATEGORY_INFO = {
+        'tramites-societarios': {
+            title: 'Trámites Societarios',
+            description: 'Información sobre constitución de sociedades, reformas societarias, inscripción de actos, trámites ante IGJ y procesos legales necesarios para empresas que operan en Argentina.'
+        },
+        'guias-y-consejos': {
+            title: 'Guías y Consejos',
+            description: 'Guías prácticas y recomendaciones profesionales para emprendedores, socios y empresas que buscan tomar mejores decisiones societarias, legales y administrativas.'
+        },
+        'actualizaciones-normativas': {
+            title: 'Actualizaciones Normativas',
+            description: 'Conocé las últimas resoluciones, cambios regulatorios, novedades legales y actualizaciones que impactan en sociedades y empresas en Argentina.'
+        },
+        'casos-practicos': {
+            title: 'Casos Prácticos',
+            description: 'Casos reales y situaciones concretas vinculadas a conflictos societarios, regularizaciones, reestructuraciones y procesos legales empresariales.'
+        },
+        'preguntas-frecuentes': {
+            title: 'Preguntas Frecuentes',
+            description: 'Respuestas claras a las consultas más frecuentes sobre sociedades, trámites registrales, obligaciones legales y decisiones clave para empresas y emprendedores.'
+        }
+    };
+
+    // Helper: Generate a single blog card HTML
+    const generateBlogCard = (post) => {
+        const excerpt = post.Content.replace(/<[^>]*>/g, '').substring(0, 120).trim() + '...';
+        const dateObj = new Date(post.Date);
+        const dateReadable = dateObj.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
+        
+        return `
+        <article class="card blog-card" style="height: 100%; display: flex; flex-direction: column; position: relative;">
+            <div class="card-image" style="height: 160px; overflow: hidden; border-radius: 8px 8px 0 0;">
+                <img src="${post.imageUrl}" alt="${post.Title} - Enlace Societario" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+            </div>
+            <div class="card-content" style="padding: 1rem 1.25rem; flex-grow: 1; display: flex; flex-direction: column;">
+                <div style="margin-bottom: 0.25rem;">
+                    <span class="category-tag" style="font-size: 0.65rem; font-weight: 800; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em;">${post.categoryName}</span>
+                </div>
+                <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem; line-height: 1.25; font-weight: 700;">
+                    <a href="/blog/${post.Slug}" class="stretched-link" title="Leer: ${post.Title}" style="text-decoration: none; color: inherit; transition: color 0.2s ease;">${post.Title}</a>
+                </h3>
+                <p style="font-size: 0.8rem; color: #555; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;">${excerpt}</p>
+                <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; font-size: 0.7rem; color: #999; border-top: 1px solid #f0f0f0; padding-top: 0.75rem;">
+                    <span style="display: flex; align-items: center; gap: 0.25rem;"><i class="fas fa-user-edit" style="font-size: 0.6rem;"></i> ${post.authorName}</span>
+                    <span><i class="far fa-calendar-alt" style="font-size: 0.6rem;"></i> ${dateReadable}</span>
+                </div>
+            </div>
+        </article>`;
+    };
+
+    // Helper: Generate Pagination HTML
+    const generatePaginationHtml = (currentPage, totalPages, basePath) => {
+        if (totalPages <= 1) return '';
+        
+        let html = '<div class="blog-pagination" style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 3rem; flex-wrap: wrap;">';
+        
+        // Prev Button
+        if (currentPage > 1) {
+            const prevUrl = currentPage === 2 ? basePath : `${basePath}/page/${currentPage - 1}`;
+            html += `<a href="${prevUrl}" class="page-link page-prev" title="Página anterior">&larr; Anterior</a>`;
+        }
+        
+        // Page Numbers with Ellipsis
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                const url = i === 1 ? basePath : `${basePath}/page/${i}`;
+                const activeClass = i === currentPage ? 'active' : '';
+                html += `<a href="${url}" class="page-link ${activeClass}">${i}</a>`;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                html += `<span class="page-ellipsis">...</span>`;
+            }
+        }
+        
+        // Next Button
+        if (currentPage < totalPages) {
+            html += `<a href="${basePath}/page/${currentPage + 1}" class="page-link page-next" title="Página siguiente">Siguiente &rarr;</a>`;
+        }
+        
+        html += '</div>';
+        return html;
+    };
+
+    // Helper: Generate Category Links
+    const generateCategoryLinks = (currentSlug) => {
+        let linksHtml = '';
+        Object.keys(CATEGORY_INFO).forEach(slug => {
+            if (slug !== currentSlug) {
+                linksHtml += `<a href="/blog/categoria/${slug}" title="${CATEGORY_INFO[slug].title}">${CATEGORY_INFO[slug].title}</a>`;
+            }
+        });
+        return linksHtml;
+    };
+
+    // 1. GENERATE INDIVIDUAL POSTS
     posts.forEach(post => {
-        // Individual Post Page
         let postTemplate = readTemplate('post.html');
         if (!postTemplate) return;
 
-        // Date formatting
         const dateObj = new Date(post.Date);
         const dateReadable = dateObj.toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
-        const dateIso = dateObj.toISOString(); // Full ISO for schema
+        const dateIso = dateObj.toISOString();
         const dateSimpleIso = dateIso.split('T')[0];
+        const dateModifiedIso = post['Date Modified'] ? new Date(post['Date Modified']).toISOString() : dateIso;
 
         const parsedContent = formatContent(post.Content, post.Slug);
-        // Internal linking automático desactivado por decisión editorial.
-        // La función enrichInternalLinks sigue disponible pero no se llama.
         const postBodyHtml = parsedContent.html;
-        // Generate recommended block (injected after keywords, not inside post_body)
         const recommendedBlock = generateRecommendedBlock(post, posts);
 
-        // Insert content into template
+        // Breadcrumbs injection
+        const categorySlug = post.Category;
+        const breadcrumbsHtml = `
+            <div class="breadcrumbs" style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem; color: #718096; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <a href="/" style="color: #718096; text-decoration: none; transition: color 0.2s ease;">Inicio</a>
+                <span>/</span>
+                <a href="/blog" style="color: #718096; text-decoration: none; transition: color 0.2s ease;">Blog</a>
+                <span>/</span>
+                <a href="/blog/categoria/${categorySlug}" style="color: #718096; text-decoration: none; transition: color 0.2s ease;">${post.categoryName}</a>
+            </div>
+        `;
+        postTemplate = postTemplate.replace(/{{breadcrumbs}}/g, breadcrumbsHtml);
+
         postTemplate = postTemplate
             .replace(/{{title}}/g, post.Title)
             .replace(/{{category}}/g, post.categoryName)
@@ -857,10 +969,8 @@ async function build() {
             .replace(/{{date_iso}}/g, dateSimpleIso)
             .replace(/{{post_body}}/g, postBodyHtml)
             .replace(/{{image_url}}/g, post.imageUrl)
-            .replace(/{{post_title}}/g, post.Title); // For ALT tags
+            .replace(/{{post_title}}/g, post.Title);
 
-
-        // Keywords badges
         let keywordsHtml = '';
         if (post.keywords) {
             const keys = post.keywords.split(/,|\r?\n/).map(k => k.trim()).filter(k => k !== '');
@@ -876,7 +986,6 @@ async function build() {
         postTemplate = postTemplate.replace(/{{keywords_html}}/g, keywordsHtml);
         postTemplate = postTemplate.replace(/{{recommended_block}}/g, recommendedBlock);
 
-        // Author Link
         const authorLinkHtml = post.authorLinkedin
             ? `<a href="${post.authorLinkedin}" target="_blank" class="author-link" title="Ver perfil de ${post.authorName}">${post.authorName}</a>`
             : post.authorName;
@@ -894,6 +1003,7 @@ async function build() {
             author: post.authorName,
             articleMeta: `
     <meta property="article:published_time" content="${dateIso}">
+    <meta property="article:modified_time" content="${dateModifiedIso}">
     <meta property="article:author" content="${post.authorName}">`,
             schema: `
     <script type="application/ld+json">
@@ -919,12 +1029,24 @@ async function build() {
           "url": "${DOMAIN}/images/logo-enlace.png"
         }
       },
-      "datePublished": "${dateIso}"
+      "datePublished": "${dateIso}",
+      "dateModified": "${dateModifiedIso}"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "${DOMAIN}/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "${DOMAIN}/blog" },
+        { "@type": "ListItem", "position": 3, "name": "${post.categoryName}", "item": "${DOMAIN}/blog/categoria/${categorySlug}" },
+        { "@type": "ListItem", "position": 4, "name": "${post.Title.replace(/"/g, '\\"')}", "item": "${canonical}" }
+      ]
     }
     </script>`
         });
         
-        // Inject FAQ Schema if present
         if (parsedContent.faqs && parsedContent.faqs.length > 0) {
             const faqSchema = {
                 "@context": "https://schema.org",
@@ -954,51 +1076,126 @@ async function build() {
             changefreq: 'weekly',
             lastmod: dateSimpleIso
         });
-
-        // Add to list grid
-        const excerpt = post.Content.replace(/<[^>]*>/g, '').substring(0, 120).trim() + '...';
-
-        blogListHtml += `
-        <article class="card blog-card" style="height: 100%; display: flex; flex-direction: column; position: relative;">
-            <div class="card-image" style="height: 160px; overflow: hidden; border-radius: 8px 8px 0 0;">
-                <img src="${post.imageUrl}" alt="${post.Title} - Enlace Societario" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
-            </div>
-            <div class="card-content" style="padding: 1rem 1.25rem; flex-grow: 1; display: flex; flex-direction: column;">
-                <div style="margin-bottom: 0.25rem;">
-                    <span class="category-tag" style="font-size: 0.65rem; font-weight: 800; color: var(--color-accent); text-transform: uppercase; letter-spacing: 0.05em;">${post.categoryName}</span>
-                </div>
-                <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem; line-height: 1.25; font-weight: 700;">
-                    <a href="/blog/${post.Slug}" class="stretched-link" title="Leer: ${post.Title}" style="text-decoration: none; color: inherit; transition: color 0.2s ease;">${post.Title}</a>
-                </h3>
-                <p style="font-size: 0.8rem; color: #555; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5;">${excerpt}</p>
-                <div style="margin-top: auto; display: flex; align-items: center; justify-content: space-between; font-size: 0.7rem; color: #999; border-top: 1px solid #f0f0f0; padding-top: 0.75rem;">
-                    <span style="display: flex; align-items: center; gap: 0.25rem;"><i class="fas fa-user-edit" style="font-size: 0.6rem;"></i> ${post.authorName}</span>
-                    <span><i class="far fa-calendar-alt" style="font-size: 0.6rem;"></i> ${dateReadable}</span>
-                </div>
-            </div>
-        </article>`;
     });
 
-    // Render Blog Listing
+    // 2. GENERATE BLOG LISTING WITH PAGINATION
+    const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
     let blogListTemplate = readTemplate('blog-list.html');
+
     if (blogListTemplate) {
-        blogListTemplate = blogListTemplate.replace('{{blog_items}}', blogListHtml);
-        const canonical = `${DOMAIN}/blog`;
-        const blogIndexHtml = renderLayout(blogListTemplate, {
-            title: 'Actualidad Societaria en Argentina | Blog Enlace',
-            description: 'Guías prácticas y novedades sobre constitución de sociedades, reformas y normativa societaria en Argentina.',
-            canonical: canonical,
-            bodyClass: 'has-transparent-nav'
+        for (let page = 1; page <= totalPages; page++) {
+            const startIdx = (page - 1) * POSTS_PER_PAGE;
+            const endIdx = startIdx + POSTS_PER_PAGE;
+            const pagePosts = posts.slice(startIdx, endIdx);
+            
+            const blogListHtml = pagePosts.map(generateBlogCard).join('');
+            const paginationHtml = generatePaginationHtml(page, totalPages, '/blog');
+            
+            let html = blogListTemplate
+                .replace('{{blog_items}}', blogListHtml)
+                .replace('{{pagination_controls}}', paginationHtml);
+                
+            const isFirstPage = page === 1;
+            const canonical = isFirstPage ? `${DOMAIN}/blog` : `${DOMAIN}/blog/page/${page}`;
+            
+            const blogIndexHtml = renderLayout(html, {
+                title: isFirstPage ? 'Actualidad Societaria en Argentina | Blog Enlace' : `Blog de Actualidad Societaria - Página ${page} | Enlace`,
+                description: 'Guías prácticas y novedades sobre constitución de sociedades, reformas y normativa societaria en Argentina.',
+                canonical: canonical,
+                bodyClass: 'has-transparent-nav'
+            });
+
+            const outputPath = isFirstPage 
+                ? path.join(CONFIG.outputDir, 'blog')
+                : path.join(CONFIG.outputDir, 'blog', 'page', page.toString());
+                
+            ensureDir(outputPath);
+            fs.writeFileSync(path.join(outputPath, 'index.html'), blogIndexHtml);
+            console.log(`Generated: Blog Index - Page ${page}`);
+
+            sitemapEntries.push({
+                loc: canonical,
+                priority: isFirstPage ? '0.9' : '0.8',
+                changefreq: 'monthly'
+            });
+        }
+    }
+
+    // 3. GENERATE CATEGORY PAGES
+    let categoryTemplate = readTemplate('blog-category.html');
+    if (categoryTemplate) {
+        // Group posts by category
+        const postsByCategory = {};
+        posts.forEach(post => {
+            const catSlug = post.Category;
+            if (!postsByCategory[catSlug]) postsByCategory[catSlug] = [];
+            postsByCategory[catSlug].push(post);
         });
 
-        ensureDir(path.join(CONFIG.outputDir, 'blog'));
-        fs.writeFileSync(path.join(CONFIG.outputDir, 'blog', 'index.html'), blogIndexHtml);
-        console.log('Generated: Blog Index');
+        Object.keys(CATEGORY_INFO).forEach(catSlug => {
+            const info = CATEGORY_INFO[catSlug];
+            const catPosts = postsByCategory[catSlug] || [];
+            
+            // Generate Breadcrumbs for Category
+            const breadcrumbsHtml = `
+                <div class="breadcrumbs" style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem; color: #fff; display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <a href="/" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s ease;">Inicio</a>
+                    <span style="color: rgba(255,255,255,0.5);">/</span>
+                    <a href="/blog" style="color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s ease;">Blog</a>
+                    <span style="color: rgba(255,255,255,0.5);">/</span>
+                    <span style="color: #fff;">${info.title}</span>
+                </div>
+            `;
 
-        sitemapEntries.push({
-            loc: canonical,
-            priority: '0.9',
-            changefreq: 'monthly'
+            const canonical = `${DOMAIN}/blog/categoria/${catSlug}`;
+            
+            // Setup Pagination logic for Category (Currently displays all, but structured for future)
+            const catTotalPages = Math.ceil(catPosts.length / POSTS_PER_PAGE);
+            
+            // For now, we generate only page 1 for category (no actual pagination links yet, but the logic is ready)
+            // But wait, the user said "display all posts belonging to that category". 
+            // So we will NOT paginate them yet. We will map all catPosts.
+            const blogListHtml = catPosts.map(generateBlogCard).join('');
+            const paginationHtml = ''; // Left empty until future implementation
+            const categoryLinksHtml = generateCategoryLinks(catSlug);
+            
+            let html = categoryTemplate
+                .replace(/{{breadcrumbs}}/g, breadcrumbsHtml)
+                .replace(/{{category_title}}/g, info.title)
+                .replace(/{{category_description}}/g, info.description)
+                .replace(/{{blog_items}}/g, blogListHtml)
+                .replace(/{{pagination_controls}}/g, paginationHtml)
+                .replace(/{{category_links}}/g, categoryLinksHtml);
+                
+            const categoryHtml = renderLayout(html, {
+                title: `${info.title} | Blog Enlace Societario`,
+                description: info.description,
+                canonical: canonical,
+                bodyClass: 'has-transparent-nav',
+                schema: `
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "${DOMAIN}/" },
+        { "@type": "ListItem", "position": 2, "name": "Blog", "item": "${DOMAIN}/blog" },
+        { "@type": "ListItem", "position": 3, "name": "${info.title}", "item": "${canonical}" }
+      ]
+    }
+    </script>`
+            });
+
+            const outputPath = path.join(CONFIG.outputDir, 'blog', 'categoria', catSlug);
+            ensureDir(outputPath);
+            fs.writeFileSync(path.join(outputPath, 'index.html'), categoryHtml);
+            console.log(`Generated Category: ${catSlug}`);
+
+            sitemapEntries.push({
+                loc: canonical,
+                priority: '0.8',
+                changefreq: 'monthly'
+            });
         });
     }
 

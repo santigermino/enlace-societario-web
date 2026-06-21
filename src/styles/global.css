@@ -566,3 +566,50 @@
         gap: 1rem;
     }
 }
+
+/* --- Pagination Styles --- */
+.blog-pagination {
+    margin-top: 4rem;
+    font-family: var(--font-heading);
+}
+
+.blog-pagination .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 0.5rem;
+    border-radius: var(--radius-md);
+    background: #F8F9FA;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.blog-pagination .page-link:hover {
+    background: rgba(105, 185, 123, 0.1);
+    color: var(--color-accent);
+    border-color: rgba(105, 185, 123, 0.3);
+}
+
+.blog-pagination .page-link.active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 10px rgba(27, 46, 60, 0.2);
+}
+
+.blog-pagination .page-prev,
+.blog-pagination .page-next {
+    padding: 0 1.25rem;
+}
+
+.blog-pagination .page-ellipsis {
+    color: #999;
+    font-weight: 600;
+    padding: 0 0.25rem;
+}

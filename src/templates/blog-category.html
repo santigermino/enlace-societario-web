@@ -1,0 +1,49 @@
+<section class="section section-dark" style="padding: 8rem 0 6rem; position: relative;">
+    <div class="container text-center">
+        {{breadcrumbs}}
+        <h1 style="text-transform: uppercase; margin-top: 1rem;">{{category_title}}</h1>
+        <p class="text-white"
+            style="opacity: 0.9; margin: 1.5rem auto 0; max-width: 800px; font-size: 1.15rem; line-height: 1.6;">{{category_description}}</p>
+    </div>
+</section>
+
+<section class="section section-bg-alt" style="padding: 4rem 0 8rem;">
+    <div class="container">
+        <div class="grid-3 blog-grid" style="row-gap: 4rem;">
+            {{blog_items}}
+        </div>
+        {{pagination_controls}}
+    </div>
+</section>
+
+<!-- Explorar otras categorías -->
+<section class="section" style="padding: 4rem 0 6rem; background: #fff; border-top: 1px solid #eee;">
+    <div class="container text-center">
+        <h3 style="margin-bottom: 2rem; color: var(--color-primary); font-weight: 600;">Explorá otros temas</h3>
+        <div class="category-links" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+            {{category_links}}
+        </div>
+    </div>
+</section>
+
+<style>
+.category-links a {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: #F8F9FA;
+    color: var(--color-primary);
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
+.category-links a:hover {
+    background: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(105,185,123,0.2);
+}
+</style>
